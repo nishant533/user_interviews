@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Interview Synthesis · AI Adoption Paradox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #f5f5f4;
+    color: #111827;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  /* ── Title strip ── */
+  .title-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 32px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 40px;
+  }
+  .title-strip-left h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.01em;
+  }
+  .title-strip-left p {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+  .persona-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .dot-blue { background: #3B82F6; }
+  .dot-purple { background: #8B5CF6; }
+  .dot-green { background: #10B981; }
+
+  /* ── Card ── */
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  /* ── Header strip ── */
+  .card-header {
+    padding: 24px 28px 20px;
+    border-left: 4px solid var(--accent);
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .header-top h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #111827;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--accent-tint);
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 6px;
+  }
+  .header-sub span { display: flex; align-items: center; gap: 6px; }
+  .header-sub span + span::before { content: '·'; color: #d1d5db; }
+
+  /* ── Card body ── */
+  .card-body {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* ── Snapshot ── */
+  .snapshot p {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.7;
+  }
+
+  /* ── Two col ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .usage-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .usage-list li {
+    font-size: 13px;
+    color: #374151;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .usage-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: #d1d5db;
+  }
+
+  .quotes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .quote-item {
+    border-left: 2px solid var(--accent);
+    padding-left: 10px;
+    font-size: 13px;
+    font-style: italic;
+    color: #374151;
+    line-height: 1.55;
+  }
+
+  /* ── Pain Points ── */
+  .pain-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tag-psych { background: #FEF3C7; color: #92400E; }
+  .tag-prac  { background: #E2E8F0; color: #475569; }
+
+  /* ── Bullets ── */
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .bullet-list li {
+    font-size: 13px;
+    color: #374151;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .bullet-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #9ca3af;
+    font-size: 11px;
+    top: 1px;
+  }
+
+  /* ── Hypothesis ── */
+  .hypothesis-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hypothesis-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+  }
+  .hyp-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .hyp-confirms  { background: #D1FAE5; color: #065F46; }
+  .hyp-challenges { background: #FEF3C7; color: #92400E; }
+  .hyp-new       { background: #DBEAFE; color: #1E40AF; }
+
+  /* ── Headline Insight ── */
+  .headline-insight {
+    background: var(--accent-tint);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .headline-insight blockquote {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+    font-style: italic;
+    line-height: 1.65;
+    letter-spacing: -0.01em;
+  }
+  .headline-insight blockquote::before {
+    content: '"';
+    font-size: 32px;
+    line-height: 0;
+    vertical-align: -12px;
+    color: var(--accent);
+    margin-right: 4px;
+    font-style: normal;
+  }
+
+  /* ── Open Questions ── */
+  .open-questions {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 16px;
+  }
+  .open-questions .section-label { color: #9ca3af; }
+  .oq-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .oq-list li {
+    font-size: 12px;
+    color: #6b7280;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .oq-list li::before {
+    content: '?';
+    position: absolute;
+    left: 0;
+    color: #d1d5db;
+    font-weight: 600;
+  }
+
+  /* ── Footer ── */
+  .site-footer {
+    text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+    letter-spacing: 0.04em;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  /* ── Per-card accents ── */
+  .card-blue   { --accent: #3B82F6; --accent-tint: #EFF6FF; }
+  .card-purple { --accent: #8B5CF6; --accent-tint: #F5F3FF; }
+  .card-green  { --accent: #10B981; --accent-tint: #ECFDF5; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .page-wrapper { padding: 20px; max-width: 100%; }
+    .card { box-shadow: none; border: 1px solid #e5e7eb; page-break-after: always; break-after: page; margin-bottom: 0; }
+    .title-strip { page-break-after: avoid; }
+    .site-footer { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Title strip -->
+  <div class="title-strip">
+    <div class="title-strip-left">
+      <h1>User Interview Synthesis · AI Adoption Paradox</h1>
+      <p>3 Personas · MGA Assignment 4 · Interviewed by Nishant · April 2026</p>
+    </div>
+    <div class="persona-dots">
+      <div class="dot dot-blue" title="Rahul — Basic"></div>
+      <div class="dot dot-purple" title="Chandu — Intermediate"></div>
+      <div class="dot dot-green" title="Shaheen — Advanced"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════ CARD 1: RAHUL ════════════════ -->
+  <div class="card card-blue">
+    <div class="card-header">
+      <div class="header-top">
+        <h2>Rahul Anand</h2>
+        <span class="badge">Basic</span>
+      </div>
+      <div class="header-sub">
+        <span>Customer Support Agent</span>
+        <span>SaaS Product</span>
+        <span>Apr 28, 2026</span>
+        <span>Interviewed by Nishant</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="snapshot">
+        <div class="section-label">Snapshot</div>
+        <p>Rahul is an AI-aware professional who uses LLMs at a basic, occasional level — primarily to refine customer support responses and for self-learning outside work. He knows agentic AI exists and recognizes AI fluency is becoming a mandatory career skill, but hasn't moved beyond single-prompt usage. He's stuck not from lack of awareness, but from time poverty and not having defined a concrete problem to solve.</p>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="section-label">Current AI Usage</div>
+          <ul class="usage-list">
+            <li>ChatGPT (work) + Gemini (personal paid) — tool choice driven by access, not strategy</li>
+            <li>"From time to time, not every day" — refines tone of support responses, asks for de-escalation strategies</li>
+            <li>Gemini Deep Research → NotebookLM for mind maps and simplified versions</li>
+            <li>Stays AI-aware via YouTube channels</li>
+            <li>Has never built any automation, flow, or multi-step AI workflow</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label">Key Quotes</div>
+          <div class="quotes-list">
+            <div class="quote-item">"Right now I just use it at the very minimal level. I don't completely make use of it."</div>
+            <div class="quote-item">"After a while, you feel like the responses are like a tool response… it always gives a generic response, which is good enough in most cases."</div>
+            <div class="quote-item">"I think every company will look for prompt engineering in their employees as a basic skill."</div>
+            <div class="quote-item">"I'm just too exhausted to again sit and work on this."</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Pain Points</div>
+        <div class="pain-grid">
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>No bandwidth — work hours are fully consumed; post-work he's "too exhausted to sit and work on this"</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Doesn't know HOW to wire automations — how to trigger a flow, get input into a message field, send automatically</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Tutorial-scroller, not project-builder — "I just randomly scroll through tutorials… haven't sat by myself, defined a problem and tried to fix it"</span></div>
+          <div class="pain-item"><span class="tag tag-psych">🧠 Psychological</span><span>AI feels like a black box — "I don't know exactly how it works… math and logic behind it… a bit difficult to grasp"</span></div>
+          <div class="pain-item"><span class="tag tag-psych">🧠 Psychological</span><span>Recognizes career stakes but feels stuck — knows AI fluency will be mandatory, can't act on it</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Aha Moments &amp; Triggers</div>
+        <ul class="bullet-list">
+          <li>Realized AI fluency is becoming mandatory ("like how Excel used to be")</li>
+          <li>DeepMind's cancer research breakthroughs amazed him — registered as "wow" not "I could try this"</li>
+          <li>Has a clear use case in mind: AI knowledge base for SaaS support to handle "how-to" questions automatically — but doesn't know how to build it</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Hypothesis Signals</div>
+        <div class="hypothesis-list">
+          <div class="hypothesis-item"><span class="hyp-badge hyp-confirms">Confirms</span><span>Time poverty + absence of a concrete problem statement is the real bottleneck — not awareness, not tools, not motivation in theory</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-challenges">Challenges</span><span>The assumption that "tutorials and content" close the gap — Rahul consumes them but they don't translate to action</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-new">New Insight</span><span>Tool selection at this level is purely driven by ease of access, not informed comparison — there's no "tool fluency" before "AI fluency"</span></div>
+        </div>
+      </div>
+
+      <div class="headline-insight">
+        <div class="section-label">Headline Insight</div>
+        <blockquote>I know AI fluency will be a mandatory skill — but I'm too exhausted after work, and I haven't sat down to define a problem worth solving.</blockquote>
+      </div>
+
+      <div class="open-questions">
+        <div class="section-label">Open Questions for Round 2</div>
+        <ul class="oq-list">
+          <li>Would a guided "starter project" framework actually break the plateau, or is the issue genuinely time/energy?</li>
+          <li>If his employer made AI exploration part of work hours, would behavior change?</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════ CARD 2: CHANDU ════════════════ -->
+  <div class="card card-purple">
+    <div class="card-header">
+      <div class="header-top">
+        <h2>Chandu Appasani</h2>
+        <span class="badge">Intermediate</span>
+      </div>
+      <div class="header-sub">
+        <span>Tech Support Lead</span>
+        <span>SaaS Product</span>
+        <span>Apr 28, 2026</span>
+        <span>Interviewed by Nishant</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="snapshot">
+        <div class="section-label">Snapshot</div>
+        <p>Chandu is a former engineer turned support/operations leader who actively uses Claude across multiple workflows — task prioritization, analytics, content refinement, system prompt generation. He's built Zapier automations and uses curiosity-driven exploration ("like a kid with a new phone"). He wants to graduate from prompt-based usage to true agentic workflows but is throttled by his actual job: human handling and firefighting consume his exploration time.</p>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="section-label">Current AI Usage</div>
+          <ul class="usage-list">
+            <li>Daily: Communication refinement, tone adjustment for customer messages</li>
+            <li>Built a daily prioritization workflow in Claude — feeds calendar + pending tasks, gets reprioritized list</li>
+            <li>Whisper voice → Claude prompts for time zone math and wait-time logic</li>
+            <li>Generates analytics from JIRA/CSAT dumps (with mixed success)</li>
+            <li>Used Claude to author a system prompt — turned a 7–8 hour task into 1 hour</li>
+            <li>Built Zapier flows for JIRA tracking, partnership round-robin, onboarding routing</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label">Key Quotes</div>
+          <div class="quotes-list">
+            <div class="quote-item">"It's helping me do things better, but is it doing things for me? That's the question I want to solve."</div>
+            <div class="quote-item">"I'm not trying to solve enough problems with AI."</div>
+            <div class="quote-item">"Cynthia's project amazed me… and also that upset me a lot. I should have got the idea and I should have implemented that."</div>
+            <div class="quote-item">"The fact that I'm not using AI enough — and I'm not getting time to explore — that frustrates me the most."</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Pain Points</div>
+        <div class="pain-grid">
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Job is "too much firefighting" — human handling, escalations, agent backups eat all exploration time</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>When automations break, debugging is expensive — has abandoned multiple JIRA flows after bugs</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Got stuck for 2 hours on a data analysis prompt, gave up without root-cause analysis</span></div>
+          <div class="pain-item"><span class="tag tag-psych">🧠 Psychological</span><span>FOMO/jealousy when peers ship AI projects — "I should have got the idea"</span></div>
+          <div class="pain-item"><span class="tag tag-psych">🧠 Psychological</span><span>"Leverage" gap — even when he has ideas, approval/budget friction blocks execution</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Doesn't always know whether a failure is the prompt, the model, or the data — model swap fixed one issue but he discovered that by accident</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Aha Moments &amp; Triggers</div>
+        <ul class="bullet-list">
+          <li>Podcast about "moving from prompt to agentic AI" — became his current learning direction</li>
+          <li>The 7–8 hour task done in 1 hour (Claude-generated system prompt) — visceral ROI moment</li>
+          <li>Got introduced to Zapier by a colleague — pure curiosity: "Bilkul nahi pata tha. Yeh kya hai? Dekhna hai mujhe."</li>
+          <li>Approach to new tools: "Like a kid with a new phone — every clickable option, I click on it"</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Hypothesis Signals</div>
+        <div class="hypothesis-list">
+          <div class="hypothesis-item"><span class="hyp-badge hyp-confirms">Confirms</span><span>For intermediates, the blocker is TIME and the COST OF DEBUGGING when things break — not access, not awareness, not aspiration</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-challenges">Challenges</span><span>The "tool overload" theory — Chandu doesn't want more tools, he wants more depth with the ones he already uses (Claude + Zapier)</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-new">New Insight</span><span>Social proof is double-edged — peer success can inspire OR demoralize. The reaction depends on whether you feel you have the leverage to act</span></div>
+        </div>
+      </div>
+
+      <div class="headline-insight">
+        <div class="section-label">Headline Insight</div>
+        <blockquote>AI is helping me do things better — but I want it doing things for me. The block isn't tools or knowledge; it's that human handling at work consumes the time I'd need to build agents.</blockquote>
+      </div>
+
+      <div class="open-questions">
+        <div class="section-label">Open Questions for Round 2</div>
+        <ul class="oq-list">
+          <li>How could "AI exploration" be re-framed as part of the job rather than extra to it?</li>
+          <li>What's the smallest agentic project he could ship in his current bandwidth that proves value?</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════ CARD 3: SHAHEEN ════════════════ -->
+  <div class="card card-green">
+    <div class="card-header">
+      <div class="header-top">
+        <h2>Shaheen Hyder</h2>
+        <span class="badge">Advanced</span>
+      </div>
+      <div class="header-sub">
+        <span>Software Engineer</span>
+        <span>Zoco</span>
+        <span>Apr 28, 2026</span>
+        <span>Interviewed by Nishant</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="snapshot">
+        <div class="section-label">Snapshot</div>
+        <p>Shaheen is a self-taught engineer (skipped college, learned via maker-space community + peer learning) who uses Claude Code and Codex daily as a thinking partner, not just a code generator. He's articulated a clear mental model for AI-fluent work: get context first, think on your own, discuss with AI, then have AI implement. He's reliability-first rather than experimentation-first — comfortable lagging the bleeding edge to ship dependable work.</p>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="section-label">Current AI Usage</div>
+          <ul class="usage-list">
+            <li>Daily: Claude Code + Codex inside JetBrains IDE — picks model by task (UI → Claude, logic → Codex)</li>
+            <li>Recent project: 2-week onboarding flow change → completed in less than a day with AI</li>
+            <li>Workflow: entry point → AI walks through conditions → think alone → discuss with AI → AI implements → iterative debug</li>
+            <li>Now confidently builds frontend (was previously back-end only) — AI's UI taste fills his skill gap</li>
+            <li>Stays updated via WhatsApp peer groups, not aggressive experimentation</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label">Key Quotes</div>
+          <div class="quotes-list">
+            <div class="quote-item">"Even before solving, we should first just discuss [with the AI]. Usually we can find a better solution than solving initially, and then solve it."</div>
+            <div class="quote-item">"What we are doing now in two days, it would take kind of a month or so [without AI]."</div>
+            <div class="quote-item">"If we are asking AI to do many things in a go, it will get isolated… breaking down is a very good thing that we always have."</div>
+            <div class="quote-item">"I always prefer reliability more than that kind of optimal."</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Pain Points</div>
+        <div class="pain-grid">
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Stack Overflow declining — for novel/deep technical problems, neither AI nor human community has answers. Real dead-ends now exist</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>AI breaks on complex multi-step tasks — has to break down problems and visually debug</span></div>
+          <div class="pain-item"><span class="tag tag-psych">🧠 Psychological</span><span>Mild trade-off cost from being reliability-first — "we will not realize a few things the earliest" (he's okay with this)</span></div>
+          <div class="pain-item"><span class="tag tag-prac">⚙️ Practical</span><span>Clear AI-adoption gap in legacy companies (Infosys-type) — restrictions + cultural unawareness, not skill issue</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Aha Moments &amp; Triggers</div>
+        <ul class="bullet-list">
+          <li>Co-pilot autocomplete → Claude Code as IDE agent = clear evolution he can articulate</li>
+          <li>Realized AI handles edge cases better than humans even think to consider — shifted his trust</li>
+          <li>Discovered: when YOU lack a skill (e.g., UI design), AI's "default taste" can be better than yours</li>
+          <li>Maker-space community in 11th grade was the original unlock — exposure → curiosity → self-teaching</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="section-label">Hypothesis Signals</div>
+        <div class="hypothesis-list">
+          <div class="hypothesis-item"><span class="hyp-badge hyp-confirms">Confirms</span><span>The fluency gap is real and methodology-shaped — Shaheen has a mental model intermediates lack ("think first, discuss with AI, then implement")</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-new">New Insight</span><span>The unlock at advanced level isn't more tools or more prompts — it's a discipline of breaking work down and discussing before solving. This is tacit, rarely articulated</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-new">New Insight</span><span>Even advanced users intentionally lag the bleeding edge if their goal is shipping. "Reliability vs. experimentation" is a stable preference, not a fluency level</span></div>
+          <div class="hypothesis-item"><span class="hyp-badge hyp-challenges">Challenges</span><span>The framing that advanced users have no frustrations — Shaheen has meta-level concerns (Stack Overflow's death, AI ceiling on truly novel problems)</span></div>
+        </div>
+      </div>
+
+      <div class="headline-insight">
+        <div class="section-label">Headline Insight</div>
+        <blockquote>AI fluency isn't about copy-pasting code — it's about thinking with AI before letting it implement. The advanced users who struggle are the ones who skip the thinking step.</blockquote>
+      </div>
+
+      <div class="open-questions">
+        <div class="section-label">Open Questions for Round 2</div>
+        <ul class="oq-list">
+          <li>Is the "think first, discuss with AI" methodology teachable, or does it need to be experienced?</li>
+          <li>What would an "AI fluency curriculum" look like for a non-engineer applying this same mental model?</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="site-footer">
+    AI Adoption Paradox &nbsp;·&nbsp; MGA Assignment 4 &nbsp;·&nbsp; Group Research &nbsp;·&nbsp; April 30, 2026
+  </div>
+
+</div>
+</body>
+</html>
