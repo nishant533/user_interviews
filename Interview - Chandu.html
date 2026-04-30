@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Interview — Chandu</title>
+<script src="deck-stage.js"></script>
+<script type="application/json" id="speaker-notes">
+[
+  "Cover slide. Introduce yourself: \"I'm doing some research on how professionals use AI in their work. I'm not pitching anything — I just want to understand your actual experience. There are no right or wrong answers.\"",
+  "QUESTION: \"Walk me through your work week — what does it actually look like?\"\n\nListen for where AI appears naturally. Don't prompt it.",
+  "QUESTION: \"How did Zapier or workflow automation first come into your life?\"\n\nFollow up: 'Who introduced you? Was there a specific moment or problem?'",
+  "QUESTION: \"Give me a specific AI-assisted workflow you've set up. Walk me through it step by step.\"\n\nPush for details — what triggers it, what tools, what's the output? Follow up: 'How long did it take to get it working? What went wrong?'",
+  "QUESTION: \"What's the most recent thing you tried to automate that didn't work out? What happened?\"\n\nFailure stories reveal the real friction. Give them space.",
+  "QUESTION: \"When you want to learn a new AI tool or integration — how do you actually go about it?\"\n\nAre they self-taught? YouTube? Colleagues? Twitter? Note the path.",
+  "QUESTION: \"Tell me about a week where AI genuinely saved you time. Now tell me about a week where it just created more work.\"\n\nThe contrast reveals what they trust vs what still feels risky.",
+  "QUESTION: \"Is there something you've seen others do with AI that you haven't figured out yet — and it bothers you?\"\n\nThis surfaces their aspirational gap. Note what they mention specifically.",
+  "QUESTION: \"What stops you from going further with AI in your work right now?\"\n\nDon't suggest answers. Wait. The silence is productive.",
+  "QUESTION: \"Of everything we've talked about — what frustrates you the most right now?\"\n\nTheir answer here is your headline insight. Capture it verbatim.",
+  "Wrap up. Thank them warmly."
+]
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0d1a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+  section {
+    width: 100%; height: 100%;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 120px;
+    position: relative;
+    color: #fff;
+  }
+
+  .slide-num {
+    position: absolute;
+    bottom: 36px;
+    right: 48px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+
+  .accent { color: #7209b7; }
+
+  .cover { align-items: center; text-align: center; }
+  .cover .tag {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7209b7;
+    margin-bottom: 28px;
+  }
+  .cover h1 {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .cover .subtitle {
+    font-size: 22px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 60px;
+  }
+  .cover .intro-note {
+    font-size: 17px;
+    color: rgba(255,255,255,0.6);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    text-wrap: pretty;
+  }
+  .cover .footer-note {
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .slide-label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7209b7;
+    margin-bottom: 32px;
+    font-weight: 600;
+  }
+  .question {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #fff;
+    max-width: 900px;
+    margin-bottom: 0;
+    text-wrap: pretty;
+  }
+  .sub-question {
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    max-width: 860px;
+    margin-top: 16px;
+    text-wrap: pretty;
+  }
+  .interviewer-note {
+    position: absolute;
+    bottom: 36px;
+    left: 120px;
+    right: 120px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .interviewer-note strong {
+    color: rgba(255,255,255,0.4);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .thankyou { align-items: center; text-align: center; }
+  .thankyou h1 { font-size: 64px; font-weight: 700; margin-bottom: 24px; }
+  .thankyou p { font-size: 24px; color: rgba(255,255,255,0.55); max-width: 700px; line-height: 1.6; }
+
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: #7209b7;
+    margin-bottom: 40px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+<deck-stage>
+
+  <!-- SLIDE 1: COVER -->
+  <section class="cover" data-screen-label="01 Cover">
+    <div class="tag">AI Adoption Research · MGA Assignment 4</div>
+    <h1>User Interview<br><span class="accent">—</span></h1>
+    <div class="subtitle">[Chandu] &nbsp;·&nbsp; [29th April 2026]</div>
+    <div class="footer-note">Confidential — no right or wrong answers</div>
+  </section>
+
+  <!-- SLIDE 2: ICE-BREAKER -->
+  <section data-screen-label="02 Ice-Breaker">
+    <div class="slide-label">Question 1</div>
+    <div class="divider"></div>
+    <div class="question">"Walk me through your work week — what does it actually look like?"</div>
+    <div class="slide-num">2 / 12</div>
+  </section>
+
+  <!-- SLIDE 3: HOW IT STARTED -->
+  <section data-screen-label="03 How It Started">
+    <div class="slide-label">Question 2</div>
+    <div class="divider"></div>
+    <div class="question">"How did Zapier or workflow automation first come into your life?"</div>
+    <div class="slide-num">3 / 12</div>
+  </section>
+
+  <!-- SLIDE 4: SHOW ME A WORKFLOW -->
+  <section data-screen-label="04 Show Me a Workflow">
+    <div class="slide-label">Question 3</div>
+    <div class="divider"></div>
+    <div class="question">"Give me a specific AI-assisted workflow you've set up. Walk me through it step by step."</div>
+    <div class="slide-num">4 / 12</div>
+  </section>
+
+  <!-- SLIDE 5: WHAT BROKE -->
+  <section data-screen-label="05 What Broke">
+    <div class="slide-label">Question 4</div>
+    <div class="divider"></div>
+    <div class="question">"What's the most recent thing you tried to automate that didn't work out?"</div>
+    <div class="sub-question">"What happened?"</div>
+    <div class="slide-num">5 / 12</div>
+  </section>
+
+  <!-- SLIDE 6: HOW YOU LEARN -->
+  <section data-screen-label="06 How You Learn">
+    <div class="slide-label">Question 5</div>
+    <div class="divider"></div>
+    <div class="question">"When you want to learn a new AI tool or integration — how do you actually go about it?"</div>
+    <div class="slide-num">6 / 12</div>
+  </section>
+
+  <!-- SLIDE 7: GOOD WEEK VS BAD WEEK -->
+  <section data-screen-label="07 Good Week vs Bad Week">
+    <div class="slide-label">Question 6</div>
+    <div class="divider"></div>
+    <div class="question">"Tell me about a week where AI genuinely saved you time."</div>
+    <div class="sub-question">"Now tell me about a week where it just created more work."</div>
+    <div class="slide-num">7 / 12</div>
+  </section>
+
+  <!-- SLIDE 8: THE GAP YOU FEEL -->
+  <section data-screen-label="08 The Gap You Feel">
+    <div class="slide-label">Question 7</div>
+    <div class="divider"></div>
+    <div class="question">"Is there something you've seen others do with AI that you haven't figured out yet — and it bothers you?"</div>
+    <div class="slide-num">8 / 12</div>
+  </section>
+
+  <!-- SLIDE 9: WHAT HOLDS YOU BACK -->
+  <section data-screen-label="09 What Holds You Back">
+    <div class="slide-label">Question 8</div>
+    <div class="divider"></div>
+    <div class="question">"What stops you from going further with AI in your work right now?"</div>
+    <div class="slide-num">9 / 12</div>
+  </section>
+
+  <!-- SLIDE 10: BIGGEST FRUSTRATION -->
+  <section data-screen-label="10 Biggest Frustration">
+    <div class="slide-label">Question 9</div>
+    <div class="divider"></div>
+    <div class="question">"Of everything we've talked about — what frustrates you the most right now?"</div>
+    <div class="slide-num">10 / 12</div>
+  </section>
+
+  <!-- SLIDE 11: THANK YOU -->
+  <section class="thankyou" data-screen-label="12 Thank You">
+    <h1>Thank you, <span class="accent">Chandu!</span></h1>
+    <p>Your insights are incredibly valuable. We'll share findings once the research wraps up.</p>
+    <div class="slide-num">11 / 11</div>
+  </section>
+
+</deck-stage>
+</body>
+</html>

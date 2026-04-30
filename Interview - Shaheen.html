@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Interview — Technical User</title>
+<script src="deck-stage.js"></script>
+<script type="application/json" id="speaker-notes">
+[
+  "Cover slide. Introduce yourself: \"I'm doing some research on how professionals use AI in their work. I'm not pitching anything — I just want to understand your actual experience. There are no right or wrong answers.\"",
+  "QUESTION: \"Tell me what you're currently building or working on.\"\n\nLet them share context. This is not about AI yet — just rapport.",
+  "QUESTION: \"When did your AI usage shift from chatting to actually building things? What changed?\"\n\nLook for a specific trigger — a project, a tool discovery, a colleague, a deadline.",
+  "QUESTION: \"Walk me through something you built recently with Claude Code or Cursor.\"\n\nPush for the full process — what did you prompt, what broke, how did you fix it?",
+  "QUESTION: \"What would that project have taken you — without AI?\"\n\nThis quantifies the value they experience. Let them do the math aloud.",
+  "QUESTION: \"Think of a smart colleague who's not using AI the way you do. Why do you think that is?\"\n\nThis is the most important slide. They're describing the adoption gap from the inside. Write down their exact words.",
+  "QUESTION: \"What was your biggest failure or mistake with AI tooling before you figured things out?\"\n\nFailures reveal what the learning curve actually looks like. Don't skip this.",
+  "QUESTION: \"Is there anything about how you use AI now that you feel others misunderstand or underestimate?\"\n\nListen for tacit knowledge — things that are obvious to them but invisible to others.",
+  "QUESTION: \"Has anyone ever asked you to teach them what you do with AI? How did that go?\"\n\nDid they succeed? Where did the other person get stuck? That's your product insight.",
+  "QUESTION: \"What still frustrates you — even at your level — about AI tools?\"\n\nAdvanced users have advanced frustrations. These are your future product opportunities.",
+  "Wrap up. Thank them warmly."
+]
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0d1a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+  section {
+    width: 100%; height: 100%;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 120px;
+    position: relative;
+    color: #fff;
+  }
+
+  .slide-num {
+    position: absolute;
+    bottom: 36px;
+    right: 48px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+
+  .accent { color: #06813f; }
+
+  .cover { align-items: center; text-align: center; }
+  .cover .tag {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #06813f;
+    margin-bottom: 28px;
+  }
+  .cover h1 {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .cover .subtitle {
+    font-size: 22px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 60px;
+  }
+  .cover .intro-note {
+    font-size: 17px;
+    color: rgba(255,255,255,0.6);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    text-wrap: pretty;
+  }
+  .cover .footer-note {
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .slide-label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #06813f;
+    margin-bottom: 32px;
+    font-weight: 600;
+  }
+  .question {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #fff;
+    max-width: 900px;
+    margin-bottom: 0;
+    text-wrap: pretty;
+  }
+  .sub-question {
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    max-width: 860px;
+    margin-top: 16px;
+    text-wrap: pretty;
+  }
+  .interviewer-note {
+    position: absolute;
+    bottom: 36px;
+    left: 120px;
+    right: 120px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .interviewer-note strong {
+    color: rgba(255,255,255,0.4);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .thankyou { align-items: center; text-align: center; }
+  .thankyou h1 { font-size: 64px; font-weight: 700; margin-bottom: 24px; }
+  .thankyou p { font-size: 24px; color: rgba(255,255,255,0.55); max-width: 700px; line-height: 1.6; }
+
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: #06813f;
+    margin-bottom: 40px;
+    border-radius: 2px;
+  }
+
+  .key-slide .slide-label {
+    background: rgba(6,129,63,0.15);
+    color: #06813f;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(6,129,63,0.3);
+  }
+</style>
+</head>
+<body>
+<deck-stage>
+
+  <!-- SLIDE 1: COVER -->
+  <section class="cover" data-screen-label="01 Cover">
+    <div class="tag">AI Adoption Research · MGA Assignment 4</div>
+    <h1>User Interview<br><span class="accent">—</span></h1>
+    <div class="subtitle">[Shaheen] &nbsp;·&nbsp; [29th April 2026]</div>
+    <div class="footer-note">Confidential — no right or wrong answers</div>
+  </section>
+
+  <!-- SLIDE 2: ICE-BREAKER -->
+  <section data-screen-label="02 Ice-Breaker">
+    <div class="slide-label">Question 1</div>
+    <div class="divider"></div>
+    <div class="question">"Tell me what you're currently building or working on."</div>
+    <div class="slide-num">2 / 12</div>
+  </section>
+
+  <!-- SLIDE 3: THE SHIFT -->
+  <section data-screen-label="03 The Shift">
+    <div class="slide-label">Question 2</div>
+    <div class="divider"></div>
+    <div class="question">"When did your AI usage shift from chatting to actually building things?"</div>
+    <div class="sub-question">"What changed?"</div>
+    <div class="slide-num">3 / 12</div>
+  </section>
+
+  <!-- SLIDE 4: RECENT BUILD -->
+  <section data-screen-label="04 Recent Build">
+    <div class="slide-label">Question 3</div>
+    <div class="divider"></div>
+    <div class="question">"Walk me through something you built recently with Claude Code or Cursor."</div>
+    <div class="slide-num">4 / 12</div>
+  </section>
+
+  <!-- SLIDE 5: THE COUNTERFACTUAL -->
+  <section data-screen-label="05 The Counterfactual">
+    <div class="slide-label">Question 4</div>
+    <div class="divider"></div>
+    <div class="question">"What would that project have taken you — without AI?"</div>
+    <div class="slide-num">5 / 12</div>
+  </section>
+
+  <!-- SLIDE 6: WHY OTHERS DON'T GET THERE -->
+  <section class="key-slide" data-screen-label="06 Why Others Don't Get There">
+    <div class="slide-label">Question 5</div>
+    <div class="divider"></div>
+    <div class="question">"Think of a smart colleague who's not using AI the way you do. Why do you think that is?"</div>
+    <div class="slide-num">6 / 12</div>
+  </section>
+
+  <!-- SLIDE 7: YOUR BIGGEST MISTAKE -->
+  <section data-screen-label="07 Your Biggest Mistake">
+    <div class="slide-label">Question 6</div>
+    <div class="divider"></div>
+    <div class="question">"What was your biggest failure or mistake with AI tooling before you figured things out?"</div>
+    <div class="slide-num">7 / 12</div>
+  </section>
+
+  <!-- SLIDE 8: WHAT OTHERS UNDERESTIMATE -->
+  <section data-screen-label="08 What Others Underestimate">
+    <div class="slide-label">Question 7</div>
+    <div class="divider"></div>
+    <div class="question">"Is there anything about how you use AI now that you feel others misunderstand or underestimate?"</div>
+    <div class="slide-num">8 / 12</div>
+  </section>
+
+  <!-- SLIDE 9: TEACHING OTHERS -->
+  <section data-screen-label="09 Teaching Others">
+    <div class="slide-label">Question 8</div>
+    <div class="divider"></div>
+    <div class="question">"Has anyone ever asked you to teach them what you do with AI? How did that go?"</div>
+    <div class="slide-num">9 / 12</div>
+  </section>
+
+  <!-- SLIDE 10: BIGGEST FRUSTRATION -->
+  <section data-screen-label="10 Biggest Frustration">
+    <div class="slide-label">Question 9</div>
+    <div class="divider"></div>
+    <div class="question">"What still frustrates you — even at your level — about AI tools?"</div>
+    <div class="slide-num">10 / 12</div>
+  </section>
+
+  <!-- SLIDE 11: THANK YOU -->
+  <section class="thankyou" data-screen-label="12 Thank You">
+    <h1>Thank <span class="accent">you!</span></h1>
+    <p>Your perspective as a power user is incredibly valuable. We'll share findings once the research wraps up.</p>
+    <div class="slide-num">11 / 11</div>
+  </section>
+
+</deck-stage>
+</body>
+</html>
