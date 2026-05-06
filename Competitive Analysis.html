@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive Analysis · AI Adoption Paradox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf7;
+    --ink: #111827;
+    --ink-soft: #374151;
+    --ink-muted: #6b7280;
+    --rule: #e5e3dc;
+    --accent: #1a1a2e;
+    --green: #059669;
+    --amber: #d97706;
+    --red: #dc2626;
+    --p3: #d97706;
+    --p2: #2563eb;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+  }
+
+  /* ── Sticky TOC ── */
+  .toc {
+    position: sticky;
+    top: 32px;
+    align-self: start;
+    height: max-content;
+    font-size: 12.5px;
+    line-height: 1.5;
+    padding-right: 16px;
+  }
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .toc ol { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .toc a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    display: flex;
+    gap: 8px;
+    padding: 3px 0;
+    transition: color 0.15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  /* ── Main column ── */
+  .main { min-width: 0; max-width: 760px; }
+  .breakout { max-width: 1100px; margin-left: -50%; transform: translateX(0); }
+  .wide {
+    max-width: 1000px;
+    margin-left: calc(50% - 500px);
+    position: relative;
+  }
+  @media (max-width: 1280px) {
+    .wide { max-width: 100%; margin-left: 0; }
+  }
+
+  /* ── Doc header ── */
+  .doc-header { margin-bottom: 96px; }
+  .doc-header .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 18px;
+  }
+  .doc-header h1 {
+    font-size: 48px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  .doc-header .doc-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.8;
+  }
+  .doc-header .doc-meta span + span::before { content: ' · '; }
+
+  /* ── Section ── */
+  section { padding-top: 72px; padding-bottom: 8px; }
+  section + section { border-top: 1px solid var(--rule); }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 18px;
+    display: block;
+  }
+  h2 {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+  h3 {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 36px;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 18px; color: var(--ink-soft); text-wrap: pretty; }
+  p strong { color: var(--ink); font-weight: 600; }
+
+  em.term {
+    font-family: 'Source Serif Pro', Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  ul, ol { margin: 0 0 18px 22px; color: var(--ink-soft); }
+  ul li, ol li { margin-bottom: 8px; }
+
+  /* ── Quotes ── */
+  .pull-quote {
+    font-family: 'Source Serif Pro', Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 22px;
+    margin: 24px 0 24px;
+  }
+  .quote-attr {
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    padding: 18px 0 18px 22px;
+    margin: 28px 0;
+    background: rgba(26,26,46,0.025);
+  }
+  .callout p { font-size: 16.5px; color: var(--ink); margin-bottom: 0; }
+  .callout p + p { margin-top: 12px; }
+
+  .callout-amber {
+    border-left-color: var(--amber);
+    background: rgba(217,119,6,0.04);
+  }
+
+  /* ── Persona chip ── */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+  .chip-p3 { background: rgba(217,119,6,0.12); color: var(--p3); }
+  .chip-p2 { background: rgba(37,99,235,0.12); color: var(--p2); }
+  .chip-neutral { background: rgba(107,114,128,0.12); color: var(--ink-muted); }
+  .chip-row { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ── Visual 1: Categories Landscape ── */
+  .landscape-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .landscape-tile {
+    border: 1px solid var(--rule);
+    background: #fff;
+    padding: 22px 24px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .landscape-tile-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+  }
+  .landscape-tile-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin-top: -6px;
+    line-height: 1.3;
+  }
+  .landscape-tile-comps {
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .landscape-tile-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+  .landscape-tile-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Tables ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  .data-table th, .data-table td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .data-table th {
+    font-weight: 600;
+    color: var(--ink);
+    background: rgba(107,114,128,0.04);
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .data-table td { color: var(--ink-soft); }
+  .data-table tr.highlight td {
+    background: rgba(26,26,46,0.04);
+    border-left: 2px solid var(--accent);
+  }
+  .data-table tr:nth-child(even) td:not(.highlight) {
+    background: rgba(107,114,128,0.025);
+  }
+  .data-table .comp-name { font-weight: 600; color: var(--ink); }
+  .data-table a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(26,26,46,0.2);
+    word-break: break-word;
+    font-size: 13px;
+  }
+  .data-table a:hover { border-bottom-color: var(--accent); }
+
+  /* ── SWOT ── */
+  .swot-block { margin: 32px 0 48px; }
+  .swot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  .swot-cat-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .swot-cat-target {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .swot-cell {
+    padding: 16px 18px;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .swot-cell-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .swot-cell p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+  .cell-s { background: rgba(5,150,105,0.05); }
+  .cell-s .swot-cell-label { color: var(--green); }
+  .cell-w { background: rgba(220,38,38,0.05); }
+  .cell-w .swot-cell-label { color: var(--red); }
+  .cell-o { background: rgba(37,99,235,0.05); }
+  .cell-o .swot-cell-label { color: var(--p2); }
+  .cell-t { background: rgba(217,119,6,0.05); }
+  .cell-t .swot-cell-label { color: var(--amber); }
+
+  /* ── 2x2 Map ── */
+  .map-wrap {
+    margin: 32px 0;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 32px;
+  }
+  .map-svg { width: 100%; height: auto; display: block; }
+
+  /* ── Gap cards ── */
+  .gap-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .gap-card {
+    border: 1px solid var(--rule);
+    background: #fff;
+    padding: 24px 26px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .gap-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .gap-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .gap-body {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .gap-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--p2);
+    background: rgba(37,99,235,0.1);
+    padding: 3px 8px;
+    border-radius: 3px;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  /* ── Roadmap ── */
+  .roadmap {
+    margin: 32px 0;
+    border-left: 2px solid var(--rule);
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .roadmap-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .roadmap-step::before {
+    content: '';
+    position: absolute;
+    left: -38px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .roadmap-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .roadmap-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .roadmap-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Footer ── */
+  .doc-footer {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--ink-muted);
+  }
+  .doc-footer p { color: var(--ink-muted); margin-bottom: 4px; }
+
+  /* ── Mobile ── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px 60px; }
+    .toc {
+      position: relative;
+      top: 0;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 20px;
+    }
+    .doc-header h1 { font-size: 36px; }
+    h2 { font-size: 24px; }
+    .landscape-grid { grid-template-columns: 1fr; }
+    .swot-grid { grid-template-columns: 1fr; }
+    .gap-row { grid-template-columns: 1fr; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 8px 10px; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    .toc { display: none; }
+    .layout { grid-template-columns: 1fr; padding: 16px; max-width: 100%; }
+    section { page-break-before: always; padding-top: 24px; }
+    section:first-of-type { page-break-before: avoid; }
+    .map-wrap { page-break-inside: avoid; }
+    .swot-block { page-break-inside: avoid; }
+    body { font-size: 11pt; }
+    h1 { font-size: 22pt; }
+    h2 { font-size: 16pt; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── TOC ── -->
+  <nav class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#s1"><span class="toc-num">01</span><span>Scope and Method</span></a></li>
+      <li><a href="#s2"><span class="toc-num">02</span><span>Four Categories</span></a></li>
+      <li><a href="#s3"><span class="toc-num">03</span><span>Cat A — Fluency Subs</span></a></li>
+      <li><a href="#s4"><span class="toc-num">04</span><span>Cat B — PM Bootcamps</span></a></li>
+      <li><a href="#s5"><span class="toc-num">05</span><span>Cat C — Vibe Coding</span></a></li>
+      <li><a href="#s6"><span class="toc-num">06</span><span>Cat E — Mentorship</span></a></li>
+      <li><a href="#s7"><span class="toc-num">07</span><span>Competitive Map</span></a></li>
+      <li><a href="#s8"><span class="toc-num">08</span><span>Category SWOT</span></a></li>
+      <li><a href="#s9"><span class="toc-num">09</span><span>Phase 1 Prioritization</span></a></li>
+      <li><a href="#s10"><span class="toc-num">10</span><span>Next Steps</span></a></li>
+      <li><a href="#s11"><span class="toc-num">11</span><span>References</span></a></li>
+    </ol>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main class="main">
+
+    <!-- Header -->
+    <header class="doc-header">
+      <div class="eyebrow">Section 16 · Phase 1 Discovery Report</div>
+      <h1>Competitive Analysis — AI Adoption Paradox</h1>
+      <div class="doc-meta">
+        <span>Researcher: Nishant</span>
+        <span>May 6, 2026</span>
+        <span>v1.0</span><br>
+        <span>Scoped to P3 (primary) and P2 (secondary)</span>
+      </div>
+    </header>
+
+    <!-- Section 1 -->
+    <section id="s1">
+      <span class="section-num">01</span>
+      <h2>Scope and Method</h2>
+      <p>This analysis maps existing solutions against the two adoption profiles the team has prioritized:</p>
+      <ul>
+        <li><strong>P3 — The Aspiring Builder (primary):</strong> Has tried to go deeper, hit a wall, stopped. The Capable Stranded PM and Frustrated Builder personas live here.</li>
+        <li><strong>P2 — The Casual Chatter (secondary):</strong> Uses AI daily for individual tasks; plateaued at the surface. The Exhausted Knower, Willing Plateauer, and Comfortable Coder personas live here.</li>
+      </ul>
+      <p><strong>In scope:</strong> Products and services that target the P3 → P4 integration gap or the P2 → P3 progression gap, plus adjacent solutions whose users overlap with these personas. Both global and India-specific players.</p>
+      <p><strong>Out of scope:</strong> Generic LLM products (ChatGPT, Claude, Gemini), pure no-code automation tools without an AI-fluency angle, university degree programs, corporate L&amp;D platforms not sold to individuals, and segments not currently prioritized (P1 Unaware, P4 Fluent Practitioner, vertical-specific tooling such as finance or healthcare).</p>
+      <div class="callout callout-amber">
+        <p><strong>Limitation to flag:</strong> The market is moving weekly. Pricing, course catalogs, and positioning may have shifted between research and decision. Treat numbers as directional.</p>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="s2">
+      <span class="section-num">02</span>
+      <h2>The Four Categories of Adjacent Solutions</h2>
+      <p>Existing solutions that target P3 and P2 cluster into four categories. None solves the full problem the research identified, but several solve large parts of it.</p>
+
+      <div class="landscape-grid">
+
+        <div class="landscape-tile">
+          <div class="landscape-tile-letter">CATEGORY A</div>
+          <div class="landscape-tile-name">AI Fluency Subscriptions</div>
+          <div class="landscape-tile-comps">Section AI · Outskill / GrowthSchool · Reforge AI courses · Anthropic / Microsoft fluency (free)</div>
+          <div class="landscape-tile-footer">
+            <span class="landscape-tile-label">Primary persona</span>
+            <span class="chip-row">
+              <span class="chip chip-p2">P2</span>
+              <span class="chip chip-neutral">P3 reach</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="landscape-tile">
+          <div class="landscape-tile-letter">CATEGORY B</div>
+          <div class="landscape-tile-name">Cohort-Based AI PM Bootcamps</div>
+          <div class="landscape-tile-comps">Marily Nika (Maven) · Product Faculty · Will Lowrey · Valerio Zanini · Mahesh Yadav · Reforge</div>
+          <div class="landscape-tile-footer">
+            <span class="landscape-tile-label">Primary persona</span>
+            <span class="chip-row">
+              <span class="chip chip-p3">P3</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="landscape-tile">
+          <div class="landscape-tile-letter">CATEGORY C</div>
+          <div class="landscape-tile-name">Vibe Coding Platforms</div>
+          <div class="landscape-tile-comps">Lovable · Bolt · Replit Agent · v0 · Cursor · monday vibe</div>
+          <div class="landscape-tile-footer">
+            <span class="landscape-tile-label">Infrastructure for</span>
+            <span class="chip-row">
+              <span class="chip chip-p3">P3</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="landscape-tile">
+          <div class="landscape-tile-letter">CATEGORY E</div>
+          <div class="landscape-tile-name">Mentorship Marketplaces (AI-leaning)</div>
+          <div class="landscape-tile-comps">ADPList · MentorCruise · GrowthMentor · Codementor · Plato · Together</div>
+          <div class="landscape-tile-footer">
+            <span class="landscape-tile-label">Activation layer for</span>
+            <span class="chip-row">
+              <span class="chip chip-p3">P3</span>
+              <span class="chip chip-p2">P2</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <p>Each is examined below.</p>
+      <p><strong>Categories not deep-dived in this analysis:</strong> AI Builder Communities (AI Tinkerers, Build Club) primarily serve P4 builders and gate non-builders out — relevant as a contributor pool, not a competitor for P3/P2. Domain-specific vertical AI tools (e.g., for finance) target segments not currently prioritized.</p>
+    </section>
+
+    <!-- Section 3 — Category A -->
+    <section id="s3">
+      <span class="section-num">03</span>
+      <h2>Category A — AI Fluency Subscriptions</h2>
+
+      <h3>Section AI (formerly Section School) — Direct Competitor for P2</h3>
+      <p>The closest single product to the kind of fluency offering that targets P2 directly. Founded by Scott Galloway. Pricing as of May 2026: free tier, $41/month (on-demand), $82/month (live + on-demand). Premium plan listed at $750/year.</p>
+      <p>Positioning is verbatim:</p>
+      <div class="pull-quote">
+        Courses teach you the concepts. AI-powered coaching helps you apply them to your actual work. Together, you go from "I get it" to "I'm doing it."
+        <div class="quote-attr">— Section AI homepage</div>
+      </div>
+      <p>This is the P2-to-P3 gap, and Section is already monetizing it.</p>
+      <p><strong>What Section does well:</strong> large catalog of courses targeted by role (marketing, ops, finance, sales, HR, customer success), AI-powered coach (ProfAI) that surfaces use cases for the user's specific work, certificates designed for LinkedIn, and a Slack community. 250+ enterprise customers.</p>
+      <p><strong>What Section does not do:</strong> 1:1 role-proximate peer matching. Their "community" is a Slack channel. The activation mechanism is video content + AI coach, not a human peer in the same role. Per the Phase 1 finding ("zero crossings traced to a course"), this is the structural weakness. Whether it is an actual weakness in user outcomes — versus a story the research is telling — is unverified.</p>
+
+      <h3>Outskill / GrowthSchool (India) — Same Pitch, Lower Trust</h3>
+      <p>Outskill, a GrowthSchool brand, runs the "AI Generalist" cohort. Marketed as the largest of its kind globally; one founding member's profile claims mentorship for 50,000+ professionals. Targets the exact P2 persona Phase 1 identified — working professionals afraid of being left behind. Pricing ranges from ₹2,000 workshops to ₹1.5L cohorts.</p>
+      <p>Trustpilot reviews skew negative. Repeated complaints about reschedules, upsells, and content that "is already freely available on YouTube." A Quora top answer reads: <em class="term">"Just go on YouTube and search for latest prompts."</em> The volume of negative signal is itself useful data: it suggests the Indian market is being addressed but not solved at the high end. There is room for a more credible offering. There is also reputational risk in occupying the same category.</p>
+
+      <h3>Anthropic AI Fluency Course (free) and Microsoft AI Fluency on Microsoft Learn (free)</h3>
+      <p>Both exist. Both are heavily content-driven. Both will inform but, by the team's own evidence, not activate. Worth noting because they shape user expectations of what "AI training" looks like and set the floor for what people will pay for.</p>
+
+      <h3>What This Tells Us</h3>
+      <p>The P2 segment (Exhausted Knower, Willing Plateauer) is being actively sold to. Section AI's positioning is functionally identical to the team's framing. The team has not yet articulated what differentiates their proposed product from Section beyond the 1:1 peer-matching layer — and that layer adds significant operational cost relative to AI-powered coaching at scale.</p>
+    </section>
+
+    <!-- Section 4 — Category B -->
+    <section id="s4">
+      <span class="section-num">04</span>
+      <h2>Category B — Cohort-Based AI PM Bootcamps</h2>
+      <p>This is the most crowded category for the P3 segment, and it is crowded with credible operators.</p>
+
+      <h3>Maven (the marketplace) — Multiple Operators Compete on This Segment</h3>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Course</th><th>Lead Instructor</th><th>Format</th><th>Distinctive Element</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="comp-name">AI Product Management Bootcamp</td>
+            <td>Dr. Marily Nika (Google) + Deb Liu</td>
+            <td>Live cohort, capstone, certification</td>
+            <td>100 cohorts, 30,000 alumni, taught at Harvard Business School. Webby-nominated 2026.</td>
+          </tr>
+          <tr>
+            <td class="comp-name">AI Product Management Certification</td>
+            <td>Product Faculty (Rohan Varma + Henry Shi)</td>
+            <td>Cohort, capstone PRD, certificate</td>
+            <td>"1,000+ reviews, 3,000+ alumni." April/May cohorts sold out.</td>
+          </tr>
+          <tr>
+            <td class="comp-name">AI for Product Managers Bootcamp</td>
+            <td>Valerio Zanini</td>
+            <td>2-week instructor-led cohort</td>
+            <td>Companion book ("AI for Product Managers") included. Vibe-coding focused.</td>
+          </tr>
+          <tr class="highlight">
+            <td class="comp-name">Build Your PM Operating System</td>
+            <td>Will Lowrey</td>
+            <td>4-week cohort, 30 PMs max</td>
+            <td><strong>The closest analogue to the team's "first-ship" wedge.</strong> Outcome: working AI system connected to the PM's real tools within 4 weeks. Flipped classroom + Slack + cohort.</td>
+          </tr>
+          <tr>
+            <td class="comp-name">Agentic AI Product Management</td>
+            <td>Mahesh Yadav</td>
+            <td>Cohort + lifetime community</td>
+            <td>PRD + portfolio output. Positioned for AI PM job market.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The team's product wedge — "first automation running in their actual job, three times in a real work week, within seven days" — is a tighter, faster version of what Will Lowrey is already running on Maven. Lowrey's pitch:</p>
+      <div class="pull-quote">
+        Learn by doing your actual job, not case studies. Every exercise uses your real PRDs, backlog, and stakeholder updates. You'll use what you build on Monday.
+        <div class="quote-attr">— Will Lowrey, Build Your PM Operating System</div>
+      </div>
+      <p>This is not adjacent to the team's wedge. It is the team's wedge, with three weeks of runway instead of one.</p>
+
+      <h3>Reforge — Mid-Market PM Strategy + AI</h3>
+      <p>Reforge (~$2,000/year) has launched five AI courses: AI Foundations, AI Productivity, AI Product Leadership, AI Growth, AI Strategy. Reforge skews senior — Director-and-above PMs at tech companies. Less direct overlap with the mid-level P3 segment, but sets the price ceiling for what experienced PMs are willing to pay annually for AI education.</p>
+
+      <h3>upGrad / IIIT-B / Logicmojo / Scaler (India)</h3>
+      <p>Indian online education incumbents. Long-form (6-18 months) AI/ML programs at ₹50K-₹3L price points. Heavily oriented toward technical skill (Python, ML, deep learning) and career switching, not workflow integration. Different segment, different pain point. Not a direct competitor for the P3 Aspiring Builder.</p>
+
+      <h3>What This Tells Us</h3>
+      <p>The team's primary persona (P3 / Capable Stranded PM) is the most over-served segment in the entire research dataset. Marily Nika alone has 30,000 alumni in this exact niche. The "Capable Stranded PM" is not a market gap. It is a market that has been formed, sized, validated, and partly captured. If the team chooses this segment, the question is no longer "is there a problem here" — the research already proved that — but "what specifically can we do that Maven cohorts cannot." The team has not yet answered that question.</p>
+    </section>
+
+    <!-- Section 5 — Category C -->
+    <section id="s5">
+      <span class="section-num">05</span>
+      <h2>Category C — Vibe Coding Platforms (The Infrastructure Layer)</h2>
+      <p>These are the tools that make "first ship" mechanically possible for P3 users. They are not training products — they are the substrate on which a training product would run. Worth understanding because the team's wedge depends on them.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Platform</th><th>ARR / valuation</th><th>Best At</th><th>Limit</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="comp-name">Lovable</td>
+            <td>~$17M ARR (3 mo, mid-2025)</td>
+            <td>Polished UIs, full-stack with Supabase, non-coder friendly</td>
+            <td>Hits a ceiling on complex features; "prototype but cannot ship" was Ritvik's quote on this</td>
+          </tr>
+          <tr>
+            <td class="comp-name">Bolt</td>
+            <td>~$40M ARR (6 mo, 2025)</td>
+            <td>Fastest prompt-to-preview, zero setup</td>
+            <td>JavaScript-only backend, weaker on durable apps</td>
+          </tr>
+          <tr>
+            <td class="comp-name">Replit Agent (4)</td>
+            <td>$1.16B valuation</td>
+            <td>Full-stack with backend + IDE; scales to real applications</td>
+            <td>Steeper learning curve, token-heavy on debugging loops</td>
+          </tr>
+          <tr>
+            <td class="comp-name">v0 (Vercel)</td>
+            <td>Part of Vercel</td>
+            <td>UI polish, designer-friendly</td>
+            <td>Less of a full-app builder</td>
+          </tr>
+          <tr>
+            <td class="comp-name">Cursor</td>
+            <td>(separate product)</td>
+            <td>IDE for developers; AI-pair-programming</td>
+            <td>Requires baseline coding fluency</td>
+          </tr>
+          <tr>
+            <td class="comp-name">monday vibe</td>
+            <td>Embedded in monday.com</td>
+            <td>Integrated with project data</td>
+            <td>Locked to monday's stack</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>What This Tells Us</h3>
+      <p>The Phase 1 research surfaced Ritvik's specific block: <em class="term">"prototype but cannot ship — Lovable cannot take him to production."</em> This is now a known and reproducible failure mode for the entire vibe-coding category. The team's wedge is silent on whether the product helps users navigate this ceiling. If the answer is "we use Lovable" the wedge inherits Lovable's ceiling. If the answer is "we route to Replit when complexity demands it" — that is a meaningful value add the team has not yet articulated.</p>
+      <p>The infrastructure exists. The activation question and the decomposition question are the open ones.</p>
+    </section>
+
+    <!-- Section 6 — Category E -->
+    <section id="s6">
+      <span class="section-num">06</span>
+      <h2>Category E — Mentorship Marketplaces (Now AI-Leaning)</h2>
+      <p>The most overlooked competitor category in the team's current analysis, and the one where the team's "1:1 role-proximate peer" thesis is closest to being already-solved — for both P3 and P2.</p>
+
+      <h3>ADPList — 30,000+ Vetted Mentors, 100M+ Mentorship Minutes, Free</h3>
+      <p>ADPList disclosed publicly that <strong>42% of all bookings on the platform are now AI-related conversations</strong> (vibe-coding, workflows, automations). They have launched a "Vibe-Coding for Designers" course at $249. Founder Annie Liao runs senior executive AI workshops directly. Mentees self-select mentors by role, seniority, and topic. Sessions are 30-60 minutes. Most are free.</p>
+      <p>Read carefully: ADPList already offers 1:1 role-proximate peer matching. It is already free. It is already heavily AI-themed. The gap is not the matching — it is what happens <em>after</em> the call. There is no decomposition scaffold, no first-ship milestone, no portfolio output. The user gets advice and disappears.</p>
+
+      <h3>MentorCruise — Paid Vetted Mentors with "AI Transformation Sprint"</h3>
+      <p>$50-$300/month subscription to a vetted mentor. Has launched an explicit "AI Transformation Sprint" service for teams. Quality signal is high; price excludes many of the personas in the dataset.</p>
+
+      <h3>GrowthMentor, Codementor, Plato, Together</h3>
+      <p>Adjacent. GrowthMentor at ~$199/month for unlimited calls is the most pricing-aggressive. Codementor handles paid-per-15-min technical help. Together is enterprise software for internal mentoring programs.</p>
+
+      <h3>What This Tells Us</h3>
+      <p><strong>This is the most important finding in this report.</strong> ADPList has already proven that 1:1 role-proximate AI peer matching is a behavior people will engage in, at scale, for free. The team's wedge ("Component 1: The Activation Layer") is partially built — by someone else, with 30,000 mentors and 100M minutes of session data. The team's defensibility against ADPList is not the matching itself. It is what comes attached to the matching: the decomposition scaffold (Component 2) and the first-ship milestone (Component 3). Those components are also where the Maven cohorts compete. The team is therefore competing with <strong>ADPList on activation</strong> and <strong>Maven on shipping</strong>, simultaneously, with an unproven combination.</p>
+    </section>
+
+    <!-- Section 7 — Map -->
+    <section id="s7">
+      <span class="section-num">07</span>
+      <h2>Competitive Map — Where Solutions Cluster, Where the Gaps Are</h2>
+      <p>Mapped against the two prioritized profiles:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr><th>Profile</th><th>Solutions Targeting Them</th><th>Gap</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="chip chip-p2">P2</span> Casual Chatter<br><span style="font-size: 12px; color: var(--ink-muted);">Exhausted Knower, Willing Plateauer</span></td>
+            <td>Section AI, Outskill, Anthropic/Microsoft free fluency, Reforge AI Foundations</td>
+            <td>Crowded with content. <strong>No product solves the "concrete first step in my exact role" demand without requiring evening hours.</strong></td>
+          </tr>
+          <tr>
+            <td><span class="chip chip-p3">P3</span> Aspiring Builder<br><span style="font-size: 12px; color: var(--ink-muted);">Capable Stranded PM, Frustrated Builder</span></td>
+            <td>Marily Nika's bootcamp, Product Faculty, Will Lowrey's PM OS, Valerio Zanini, Mahesh Yadav, ADPList for activation</td>
+            <td><strong>Heavily over-served on bootcamps; activation layer commoditized by ADPList.</strong> The team's wedge is most similar to existing offerings here.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2x2 Map -->
+      <div class="map-wrap">
+        <svg class="map-svg" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
+          <!-- Title -->
+          <text x="400" y="22" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#6b7280" letter-spacing="1.5">COMPETITIVE MAP — P3 + P2</text>
+
+          <!-- Axes -->
+          <line x1="120" y1="60" x2="120" y2="460" stroke="#9ca3af" stroke-width="1"/>
+          <line x1="120" y1="460" x2="720" y2="460" stroke="#9ca3af" stroke-width="1"/>
+
+          <!-- Mid lines -->
+          <line x1="420" y1="60" x2="420" y2="460" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3 4"/>
+          <line x1="120" y1="260" x2="720" y2="260" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3 4"/>
+
+          <!-- Quadrant labels -->
+          <text x="270" y="85" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#9ca3af" letter-spacing="1.5">AVOID</text>
+          <text x="570" y="85" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1a1a2e" font-weight="600" letter-spacing="1.5">CONTESTED</text>
+          <text x="270" y="445" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#9ca3af" letter-spacing="1.5">QUESTIONABLE</text>
+          <text x="570" y="445" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#9ca3af" letter-spacing="1.5">OPPORTUNITY</text>
+
+          <!-- Y axis label -->
+          <text x="65" y="260" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#374151" font-weight="600" transform="rotate(-90 65 260)">Competitive Density</text>
+          <text x="105" y="80" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b7280">High</text>
+          <text x="105" y="455" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b7280">Low</text>
+
+          <!-- X axis label -->
+          <text x="420" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#374151" font-weight="600">Pain Acuity</text>
+          <text x="120" y="478" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b7280">Low</text>
+          <text x="720" y="478" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b7280">High</text>
+
+          <!-- Wedge annotation arrow -->
+          <path d="M 670 175 Q 640 145, 615 138" fill="none" stroke="#1a1a2e" stroke-width="1.2"/>
+          <polygon points="615,138 622,134 619,142" fill="#1a1a2e"/>
+          <text x="675" y="170" font-family="Inter, sans-serif" font-size="12" fill="#1a1a2e" font-weight="600">Team's current</text>
+          <text x="675" y="186" font-family="Inter, sans-serif" font-size="12" fill="#1a1a2e" font-weight="600">wedge sits here</text>
+
+          <!-- P3 dot — high pain, high density -->
+          <circle cx="605" cy="135" r="14" fill="#d97706" opacity="0.18"/>
+          <circle cx="605" cy="135" r="8" fill="#d97706"/>
+          <text x="605" y="108" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#111827" font-weight="600">P3 — Capable Stranded PM</text>
+          <text x="605" y="123" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#6b7280">(and Frustrated Builder)</text>
+
+          <!-- P2 dot — high pain, moderate-high density -->
+          <circle cx="555" cy="220" r="14" fill="#2563eb" opacity="0.18"/>
+          <circle cx="555" cy="220" r="8" fill="#2563eb"/>
+          <text x="555" y="248" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#111827" font-weight="600">P2 — Exhausted Knower</text>
+
+        </svg>
+      </div>
+
+      <h3>Two Genuine Gaps Worth Noting</h3>
+      <div class="gap-row">
+        <div class="gap-card">
+          <div class="gap-num">01</div>
+          <div class="gap-title">A "watch-and-do" format for the P2 Exhausted Knower that compresses the time ask below 30 minutes per session.</div>
+          <div class="gap-body">Existing courses assume hours of evening engagement. Section's AI coach is the closest, but the Phase 1 research suggests AI-coached self-instruction is exactly the failure mode being described. Whether a 15-minute peer-recorded demo activates a stuck professional is the real Phase 2 question.</div>
+          <span class="gap-tag">Validation Needed</span>
+        </div>
+        <div class="gap-card">
+          <div class="gap-num">02</div>
+          <div class="gap-title">The "AI to build, even non-AI things" stepping stone (Phase 1 Surprise 1).</div>
+          <div class="gap-body">No adjacent product currently positions vibe-coding as an entry rung for general workflow automation rather than as an AI building tool. This may be a positioning angle, not a separate product, but it is unowned.</div>
+          <span class="gap-tag">White Space</span>
+        </div>
+      </div>
+
+      <h3>Apparent Gaps That Are Actually Crowded</h3>
+      <ul>
+        <li><strong>Cohort-based first-ship for PMs (P3):</strong> Will Lowrey, Marily Nika, Product Faculty, and Valerio Zanini all run versions. Highly competitive.</li>
+        <li><strong>Peer-matched 1:1 AI mentorship (P3 and P2):</strong> ADPList already does this. Free.</li>
+        <li><strong>AI fluency for general professionals (P2):</strong> Section AI, Outskill, Reforge already serve this. Differentiation is on quality and trust, not category.</li>
+      </ul>
+    </section>
+
+    <!-- Section 8 — SWOT -->
+    <section id="s8">
+      <span class="section-num">08</span>
+      <h2>Category-Level SWOT Analysis</h2>
+      <p>A SWOT at the individual-competitor level would mostly produce noise — competitors within a category share most of their strategic posture. The category is where the strategic choice lives.</p>
+      <p>Each SWOT below is read as: <em class="term">if the team built a product in this category, what would it inherit from the category itself?</em></p>
+
+      <!-- SWOT A -->
+      <div class="swot-block">
+        <div class="swot-header">
+          <span class="swot-cat-name">Category A — AI Fluency Subscriptions</span>
+          <span class="swot-cat-target">Section AI · Outskill · Reforge · targets P2</span>
+        </div>
+        <div class="swot-grid">
+          <div class="swot-cell cell-s">
+            <span class="swot-cell-label">Strengths</span>
+            <p>Proven willingness to pay ($41-$82/month sustained). Recurring revenue model. AI-powered coaching scales without humans. Certificate as LinkedIn-ready credential matches Phase 1 finding on portfolio motive.</p>
+          </div>
+          <div class="swot-cell cell-w">
+            <span class="swot-cell-label">Weaknesses</span>
+            <p>Phase 1 research explicitly killed content as the activation mechanism ("13 interviews, zero crossings traced to a course"). Category leader (Section AI) sells the same pitch the team would sell — head-to-head undifferentiated. Outskill's reputational damage drags on the entire Indian segment.</p>
+          </div>
+          <div class="swot-cell cell-o">
+            <span class="swot-cell-label">Opportunities</span>
+            <p>Specialization by role × seniority is still incomplete. AI coach is generic; an opinionated, role-specific coach has room.</p>
+          </div>
+          <div class="swot-cell cell-t">
+            <span class="swot-cell-label">Threats</span>
+            <p>Frontier models are commoditizing fluency content; ChatGPT itself increasingly answers "how should I use AI in my role." Free Anthropic and Microsoft fluency courses set price floor near zero. Buyer fatigue in the "AI course" category is rising.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SWOT B -->
+      <div class="swot-block">
+        <div class="swot-header">
+          <span class="swot-cat-name">Category B — Cohort-Based AI PM Bootcamps</span>
+          <span class="swot-cat-target">Lowrey · Nika · Product Faculty · Zanini · targets P3</span>
+        </div>
+        <div class="swot-grid">
+          <div class="swot-cell cell-s">
+            <span class="swot-cell-label">Strengths</span>
+            <p>Highest demonstrated willingness to pay ($1,500-$3,000 per cohort). Capstone-as-portfolio matches the credentialing motive Phase 1 surfaced. Cohort dynamics produce real shipping outcomes. Maven as a marketplace de-risks discovery.</p>
+          </div>
+          <div class="swot-cell cell-w">
+            <span class="swot-cell-label">Weaknesses</span>
+            <p>Time-bound (4-8 weeks) — does not solve the ongoing fluency problem after course ends. Cohort caps (30-80 students) make scaling labor-intensive. Instructor brand drives enrollment more than course content — defensibility is personal, not structural.</p>
+          </div>
+          <div class="swot-cell cell-o">
+            <span class="swot-cell-label">Opportunities</span>
+            <p>Adjacent verticals untouched at this format quality: AI cohorts for sales leaders, ops leads, marketers, lawyers. The PM segment is saturated; the format is not.</p>
+          </div>
+          <div class="swot-cell cell-t">
+            <span class="swot-cell-label">Threats</span>
+            <p>Marily Nika has 30,000 alumni. Product Faculty has 3,000+. Will Lowrey explicitly targets the team's wedge. Any new entrant fights for ~20% market share against established instructors with name recognition and reviews. New instructors ship to Maven monthly.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SWOT C -->
+      <div class="swot-block">
+        <div class="swot-header">
+          <span class="swot-cat-name">Category C — Vibe Coding Platforms</span>
+          <span class="swot-cat-target">Lovable · Bolt · Replit · v0 · Cursor · infrastructure for P3</span>
+        </div>
+        <div class="swot-grid">
+          <div class="swot-cell cell-s">
+            <span class="swot-cell-label">Strengths</span>
+            <p>Massive ARR growth ($17M-$40M in months) demonstrates real demand. Removes the "I don't know how to code" objection entirely. Output is visible and shareable, which feeds the credentialing motive.</p>
+          </div>
+          <div class="swot-cell cell-w">
+            <span class="swot-cell-label">Weaknesses</span>
+            <p>Phase 1 surfaced Ritvik's exact failure mode ("prototype but cannot ship") as a category-wide ceiling. Token-based pricing surprises non-technical buyers. Tools require the user to already know what they want to build — they do not solve the decomposition block.</p>
+          </div>
+          <div class="swot-cell cell-o">
+            <span class="swot-cell-label">Opportunities</span>
+            <p>White space at the <em>layer above</em> the tools: opinionated workflows, role-specific scaffolds, prompt libraries that route between tools by use case. The tools race for general-purpose; opinionated wrappers can win specific niches.</p>
+          </div>
+          <div class="swot-cell cell-t">
+            <span class="swot-cell-label">Threats</span>
+            <p>Foundation model providers (OpenAI, Anthropic, Google) are absorbing this layer. Claude Code, GPT Code, Gemini's vibe coding all reduce the addressable market for standalone vibe coding tools. The category may collapse into the foundation model itself within 18 months.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SWOT E -->
+      <div class="swot-block">
+        <div class="swot-header">
+          <span class="swot-cat-name">Category E — Mentorship Marketplaces, AI-Leaning</span>
+          <span class="swot-cat-target">ADPList · MentorCruise · GrowthMentor · targets both P3 and P2</span>
+        </div>
+        <div class="swot-grid">
+          <div class="swot-cell cell-s">
+            <span class="swot-cell-label">Strengths</span>
+            <p>ADPList: 30,000+ mentors, 100M+ session minutes, <strong>42% of bookings now AI-related</strong>, free. Network effects deep and durable. Role-proximate matching is functional and used. The team's "Component 1: Activation Layer" is already commoditized here.</p>
+          </div>
+          <div class="swot-cell cell-w">
+            <span class="swot-cell-label">Weaknesses</span>
+            <p>Sessions are unstructured. No decomposition scaffold, no first-ship milestone, no follow-through. User gets advice, leaves, plateaus. Mentor incentives are reputational, not outcome-based — quality varies. Free tier saps willingness to pay for adjacent paid layers.</p>
+          </div>
+          <div class="swot-cell cell-o">
+            <span class="swot-cell-label">Opportunities</span>
+            <p>The structured layer <em>on top of</em> mentorship is unowned: an outcome-guaranteed product that uses ADPList-style matching as input but adds scaffolding, milestones, and portfolio output. This is closest to the team's actual differentiator.</p>
+          </div>
+          <div class="swot-cell cell-t">
+            <span class="swot-cell-label">Threats</span>
+            <p>ADPList itself is moving up the stack — they launched a Vibe-Coding for Designers course at $249. If they build the structured layer themselves using their existing supply, no new entrant can compete on cost or matching quality. The window to build on top of ADPList may close before it opens.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Reading the SWOT</h3>
+      <div class="callout">
+        <p>The category-level SWOT surfaces a pattern the per-competitor view would have hidden: <strong>the team's current product direction sits at the intersection of Category B (cohort-based PM bootcamps) and Category E (mentorship marketplaces), in a segment where Category A is also actively selling.</strong> That intersection is the most contested square on the entire map.</p>
+        <p>The genuine structural opportunity — the upper layer of Category E (a structured product on top of mentorship) — exists but is also where ADPList itself is moving. The window matters.</p>
+        <p>This is not a death sentence for the current direction. It is a flag that the direction was chosen without seeing this map, and the prioritization conversation should now happen with the map in view.</p>
+      </div>
+    </section>
+
+    <!-- Section 9 — Prioritization -->
+    <section id="s9">
+      <span class="section-num">09</span>
+      <h2>What This Means for Phase 1 Prioritization</h2>
+      <p>Three checks worth running before locking direction:</p>
+      <p><strong>Check 1 — Does the team's primary segment (P3 / Capable Stranded PM) survive a head-to-head with Will Lowrey's PM Operating System course?</strong> That course exists, has run cohorts, and is positioned almost identically. If the team cannot articulate why a stranded PM would choose them over Lowrey or Marily Nika, the segment may need to change.</p>
+      <p><strong>Check 2 — Is the team's first-ship wedge actually an activation product or actually a Maven cohort?</strong> The wedge as written ("peer-matched, role-specific first-ship") shares ~80% of its DNA with Will Lowrey's offering. The 20% difference (1:1 peer matching at the start) is the part that ADPList has already commoditized for free. The remaining differentiator is the integration of those two — which is novel, but unproven.</p>
+      <p><strong>Check 3 — Is the P2 secondary segment a defensible flank, or a distraction?</strong> P2 is well-served by Section AI and Outskill, but neither has solved the time-poverty problem the Phase 1 research surfaced. A "30-minute first step" angle is unowned. Whether the team can serve both P3 and P2 with one product, or whether P2 should be a separate motion, is currently unanswered.</p>
+    </section>
+
+    <!-- Section 10 — Next Steps -->
+    <section id="s10">
+      <span class="section-num">10</span>
+      <h2>Recommended Next Steps (Phase 1 Closure)</h2>
+      <div class="roadmap">
+        <div class="roadmap-step">
+          <div class="roadmap-num">01</div>
+          <div class="roadmap-title">Prioritize the personas using explicit criteria.</div>
+          <p class="roadmap-desc">Suggested: pain acuity (already in research), market size (need rough estimates), willingness to pay (need Phase 2), and competitive whitespace (this report).</p>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">02</div>
+          <div class="roadmap-title">Test the "Will Lowrey question" with one Stranded PM.</div>
+          <p class="roadmap-desc">Show them his Maven course landing page. Ask: <em class="term">"Why would you not just do this?"</em> If the answer is satisfactory, the team has a wedge. If the answer is "I would just do this" — the wedge has not survived.</p>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">03</div>
+          <div class="roadmap-title">Decide live vs recorded peer demo before any build commitment.</div>
+          <p class="roadmap-desc">The Phase 1 report flags this as the highest-stakes open question. ADPList scales because demos are live. If recorded peer demos activate equally, the platform model wins. If live presence is required, this is a service business, and the unit economics change completely. This decision determines what the product actually is.</p>
+        </div>
+        <div class="roadmap-step">
+          <div class="roadmap-num">04</div>
+          <div class="roadmap-title">Add a P2-specific Phase 2 interview round.</div>
+          <p class="roadmap-desc">The current dataset over-indexes on P3. Validating whether P2 is a defensible flank requires more data points specifically from Casual Chatters with concrete unbuilt use cases.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11 — References -->
+    <section id="s11">
+      <span class="section-num">11</span>
+      <h2>References — Competitors Considered</h2>
+      <p>The table below lists every competitor referenced in this analysis, the category they were placed in (matching the SWOT structure in Section 8), and a primary URL. Confidence in URLs is high for products with active web presence.</p>
+
+      <h3>Category A — AI Fluency Subscriptions <span class="chip chip-p2" style="margin-left: 8px;">P2</span></h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Competitor</th><th>What They Do</th><th>Persona</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="comp-name">Section AI</td>
+            <td>On-demand + live AI courses, AI coaching, certificates ($41-$82/mo)</td>
+            <td><span class="chip chip-p2">P2</span></td>
+            <td><a href="https://www.sectionai.com" target="_blank" rel="noopener">sectionai.com</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Outskill (GrowthSchool)</td>
+            <td>"AI Generalist" cohort for working professionals (₹2K-₹1.5L)</td>
+            <td><span class="chip chip-p2">P2</span></td>
+            <td><a href="https://www.outskill.com" target="_blank" rel="noopener">outskill.com</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">GrowthSchool</td>
+            <td>Cohort-based courses including AI Generalist program</td>
+            <td><span class="chip chip-p2">P2</span></td>
+            <td><a href="https://www.growthschool.io" target="_blank" rel="noopener">growthschool.io</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Anthropic AI Fluency Course</td>
+            <td>Free AI fluency framework and courses</td>
+            <td><span class="chip chip-p2">P2</span></td>
+            <td><a href="https://anthropic.skilljar.com" target="_blank" rel="noopener">anthropic.skilljar.com</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Microsoft AI Fluency on MS Learn</td>
+            <td>Free Copilot and AI fluency learning paths</td>
+            <td><span class="chip chip-p2">P2</span></td>
+            <td><a href="https://learn.microsoft.com/en-us/training/paths/ai-fluency/" target="_blank" rel="noopener">learn.microsoft.com</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Reforge AI courses</td>
+            <td>AI Foundations, AI Productivity, AI Strategy ($2K/yr membership)</td>
+            <td><span class="chip-row"><span class="chip chip-p3">P3</span><span class="chip chip-p2">P2</span></span></td>
+            <td><a href="https://www.reforge.com/courses" target="_blank" rel="noopener">reforge.com/courses</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Category B — Cohort-Based AI PM Bootcamps <span class="chip chip-p3" style="margin-left: 8px;">P3</span></h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Competitor</th><th>What They Do</th><th>Persona</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="comp-name">AI Product Management Bootcamp (Marily Nika, Maven)</td>
+            <td>100 cohorts, 30K alumni; live cohort + capstone</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/marily-nika/ai-pm-bootcamp" target="_blank" rel="noopener">maven.com/marily-nika</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">AI Product Management 101 (Marily Nika)</td>
+            <td>Foundation course, taught at Harvard Business School</td>
+            <td><span class="chip-row"><span class="chip chip-p3">P3</span><span class="chip chip-p2">P2</span></span></td>
+            <td><a href="https://maven.com/marily-nika/ai-product-management" target="_blank" rel="noopener">maven.com/marily-nika/101</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">AI Product Management Certification (Product Faculty)</td>
+            <td>4-D Method + 5-Question Framework cohort</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/product-faculty/ai-product-management-certification" target="_blank" rel="noopener">maven.com/product-faculty</a></td>
+          </tr>
+          <tr class="highlight">
+            <td class="comp-name">Build Your PM Operating System (Will Lowrey)</td>
+            <td><strong>Closest match to team's wedge</strong> — 4-week first-ship cohort</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/will-lowrey/claude-code-for-pms-build-ai-fluency" target="_blank" rel="noopener">maven.com/will-lowrey</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">AI for Product Managers Bootcamp (Valerio Zanini)</td>
+            <td>2-week instructor-led, vibe-coding focused</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/sparkengine/aiproductmanagers" target="_blank" rel="noopener">maven.com/sparkengine</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Agentic AI Product Management (Mahesh Yadav)</td>
+            <td>Cohort + lifetime community + portfolio output</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/mahesh-yadav/genaipm" target="_blank" rel="noopener">maven.com/mahesh-yadav</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Agentic AI for Product Managers (Hamza Farooq)</td>
+            <td>Enterprise-grade agent build cohort</td>
+            <td><span class="chip chip-p3">P3</span></td>
+            <td><a href="https://maven.com/boring-bot/ml-system-design" target="_blank" rel="noopener">maven.com/boring-bot</a></td>
+          </tr>
+          <tr>
+            <td class="comp-name">Maven (marketplace)</td>
+            <td>Hosts cohort-based AI courses</td>
+            <td><span class="chip chip-neutral">Discovery</span></td>
+            <td><a href="https://maven.com" target="_blank" rel="noopener">maven.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Category C — Vibe Coding Platforms <span class="chip chip-p3" style="margin-left: 8px;">P3 infrastructure</span></h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Competitor</th><th>What They Do</th><th>Persona</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="comp-name">Lovable</td><td>Polished UIs + Supabase backend; non-coder friendly</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://lovable.dev" target="_blank" rel="noopener">lovable.dev</a></td></tr>
+          <tr><td class="comp-name">Bolt (StackBlitz)</td><td>Browser-based AI app builder; fastest prompt-to-preview</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://bolt.new" target="_blank" rel="noopener">bolt.new</a></td></tr>
+          <tr><td class="comp-name">Replit Agent</td><td>Full-stack with backend + IDE; scales to real apps</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://replit.com" target="_blank" rel="noopener">replit.com</a></td></tr>
+          <tr><td class="comp-name">v0 (Vercel)</td><td>UI generation, designer-friendly</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://v0.dev" target="_blank" rel="noopener">v0.dev</a></td></tr>
+          <tr><td class="comp-name">Cursor</td><td>AI-pair-programming IDE for developers</td><td><span class="chip chip-p3">P3 (technical)</span></td><td><a href="https://cursor.com" target="_blank" rel="noopener">cursor.com</a></td></tr>
+          <tr><td class="comp-name">monday vibe</td><td>Embedded vibe-coding inside monday.com workflows</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://monday.com" target="_blank" rel="noopener">monday.com</a></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Category E — Mentorship Marketplaces <span class="chip-row" style="margin-left: 8px;"><span class="chip chip-p3">P3</span><span class="chip chip-p2">P2 activation</span></span></h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Competitor</th><th>What They Do</th><th>Persona</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td class="comp-name">ADPList</td>
+            <td><strong>30K+ mentors, 100M+ minutes, 42% AI bookings, free</strong></td>
+            <td><span class="chip-row"><span class="chip chip-p3">P3</span><span class="chip chip-p2">P2</span></span></td>
+            <td><a href="https://adplist.org" target="_blank" rel="noopener">adplist.org</a></td>
+          </tr>
+          <tr><td class="comp-name">MentorCruise</td><td>Vetted paid mentors; "AI Transformation Sprint" service</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://mentorcruise.com" target="_blank" rel="noopener">mentorcruise.com</a></td></tr>
+          <tr><td class="comp-name">GrowthMentor</td><td>Vetted mentors; $199/mo unlimited calls</td><td><span class="chip-row"><span class="chip chip-p3">P3</span><span class="chip chip-p2">P2</span></span></td><td><a href="https://www.growthmentor.com" target="_blank" rel="noopener">growthmentor.com</a></td></tr>
+          <tr><td class="comp-name">Codementor</td><td>Paid-per-15-min technical help for developers</td><td><span class="chip chip-p3">P3 (technical)</span></td><td><a href="https://www.codementor.io" target="_blank" rel="noopener">codementor.io</a></td></tr>
+          <tr><td class="comp-name">Plato</td><td>Engineering and product leadership mentorship</td><td><span class="chip chip-p3">P3</span></td><td><a href="https://www.platohq.com" target="_blank" rel="noopener">platohq.com</a></td></tr>
+          <tr><td class="comp-name">Together</td><td>Enterprise software for internal mentoring programs</td><td><span class="chip chip-neutral">Adjacent</span></td><td><a href="https://www.togetherplatform.com" target="_blank" rel="noopener">togetherplatform.com</a></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Notes on This Reference List</h3>
+      <div class="callout">
+        <p><strong>Total competitors considered for P3 + P2:</strong> ~26 across four categories.</p>
+        <p><strong>Excluded by design:</strong> Generic LLMs (ChatGPT, Claude, Gemini), pure no-code tools without AI-fluency angle, university degree programs, AI builder communities (P4-gated), and vertical-specific tools for non-prioritized segments (e.g., finance).</p>
+        <p><strong>Confidence note:</strong> Section AI, Maven cohorts (especially Will Lowrey and Marily Nika), ADPList, and the Vibe Coding tools are the most directly comparable to the team's proposed direction and were studied most thoroughly.</p>
+        <p><strong>The market is moving weekly.</strong> New courses launch on Maven monthly; existing players reposition on a quarterly cadence. This list reflects the state of the market as of May 6, 2026.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="doc-footer">
+      <p><strong style="color: var(--ink);">Authors:</strong> Jerry Alex · Nishant · Debargha · Priyamvada · Pranit · Himanshu Jain</p>
+      <p><strong style="color: var(--ink);">Course:</strong> HelloPM Cohort 49, Assignment 4</p>
+      <p><strong style="color: var(--ink);">Phase:</strong> Phase 1 Discovery — Section 16: Competitive Analysis</p>
+      <p><strong style="color: var(--ink);">Version:</strong> 1.0 &nbsp;·&nbsp; <strong style="color: var(--ink);">Date:</strong> May 6, 2026</p>
+      <p style="margin-top: 16px;">Sources: 50+ web searches across competitor websites, course platforms, mentorship marketplaces, vibe-coding tool comparisons, and India edtech reviews. Specific company claims and pricing verified against primary sources. Market is moving fast; treat as directional.</p>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
