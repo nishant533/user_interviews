@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MGA4 · Phase 2 · AI Adoption Paradox — Individual Contribution</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --c-bg: #ffffff;
+    --c-bg2: #f7f6f2;
+    --c-bg3: #f0ede6;
+    --c-text: #1a1a1a;
+    --c-muted: #5f5e5a;
+    --c-border: rgba(0,0,0,0.1);
+    --c-purple-bg: #eeedfe;
+    --c-purple-mid: #7f77dd;
+    --c-purple-dark: #3c3489;
+    --c-teal-bg: #e1f5ee;
+    --c-teal-mid: #1d9e75;
+    --c-teal-dark: #085041;
+    --c-coral-bg: #faece7;
+    --c-coral-mid: #d85a30;
+    --c-coral-dark: #4a1b0c;
+    --c-amber-bg: #faeeda;
+    --c-amber-mid: #ba7517;
+    --c-amber-dark: #412402;
+    --c-blue-bg: #e6f1fb;
+    --c-blue-mid: #378add;
+    --c-blue-dark: #042c53;
+    --c-green-bg: #eaf3de;
+    --c-green-mid: #639922;
+    --c-green-dark: #173404;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-bg: #1c1c1a;
+      --c-bg2: #242422;
+      --c-bg3: #2c2c2a;
+      --c-text: #e8e6df;
+      --c-muted: #a0a09a;
+      --c-border: rgba(255,255,255,0.1);
+      --c-purple-bg: #26215c;
+      --c-purple-mid: #afa9ec;
+      --c-purple-dark: #eeedfe;
+      --c-teal-bg: #04342c;
+      --c-teal-mid: #5dcaa5;
+      --c-teal-dark: #e1f5ee;
+      --c-coral-bg: #4a1b0c;
+      --c-coral-mid: #f0997b;
+      --c-coral-dark: #faece7;
+      --c-amber-bg: #412402;
+      --c-amber-mid: #ef9f27;
+      --c-amber-dark: #faeeda;
+      --c-blue-bg: #042c53;
+      --c-blue-mid: #85b7eb;
+      --c-blue-dark: #e6f1fb;
+      --c-green-bg: #173404;
+      --c-green-mid: #97c459;
+      --c-green-dark: #eaf3de;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .hero {
+    border-bottom: 0.5px solid var(--c-border);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  h1 { font-size: 28px; font-weight: 500; line-height: 1.3; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--c-muted); font-size: 14px; }
+  .em { color: var(--c-purple-mid); font-style: italic; }
+
+  nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  nav a {
+    font-size: 13px;
+    padding: 5px 12px;
+    border: 0.5px solid var(--c-border);
+    border-radius: var(--radius-md);
+    color: var(--c-muted);
+    text-decoration: none;
+    background: var(--c-bg2);
+  }
+  nav a:hover { color: var(--c-text); border-color: var(--c-purple-mid); }
+
+  section { margin-bottom: 3.5rem; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--c-border);
+  }
+
+  h2 { font-size: 20px; font-weight: 500; margin-bottom: 1rem; }
+  h3 { font-size: 16px; font-weight: 500; margin-bottom: 0.5rem; }
+
+  .hmw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 1rem;
+  }
+  .hmw-card {
+    background: var(--c-bg2);
+    border: 0.5px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+  .hmw-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+  }
+  .tag-p2 { background: var(--c-blue-bg); color: var(--c-blue-dark); }
+  .tag-p3 { background: var(--c-purple-bg); color: var(--c-purple-dark); }
+  .tag-org { background: var(--c-teal-bg); color: var(--c-teal-dark); }
+  .tag-wild { background: var(--c-amber-bg); color: var(--c-amber-dark); }
+
+  .hmw-q { font-size: 13px; color: var(--c-muted); margin-bottom: 6px; }
+  .hmw-q strong { color: var(--c-text); font-weight: 400; }
+  .hmw-arrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-purple-mid);
+    margin-top: 0.5rem;
+  }
+
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--c-bg3);
+    font-weight: 500;
+    text-align: left;
+    padding: 8px 12px;
+    border: 0.5px solid var(--c-border);
+    color: var(--c-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  td {
+    padding: 8px 12px;
+    border: 0.5px solid var(--c-border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--c-bg2); }
+  .score-cell { font-weight: 500; text-align: center; }
+  .total-cell { font-weight: 500; color: var(--c-purple-mid); text-align: center; font-size: 15px; }
+  .rank-1 { background: var(--c-purple-bg) !important; }
+  .rank-2 { background: var(--c-teal-bg) !important; }
+  .rank-3 { background: var(--c-blue-bg) !important; }
+  .priority-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+  }
+  .p-primary { background: var(--c-purple-bg); color: var(--c-purple-dark); }
+  .p-second  { background: var(--c-teal-bg); color: var(--c-teal-dark); }
+  .p-third   { background: var(--c-blue-bg); color: var(--c-blue-dark); }
+  .p-backlog { background: var(--c-bg3); color: var(--c-muted); }
+
+  .concept-card {
+    border: 0.5px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .concept-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .concept-num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .concept-title { font-size: 20px; font-weight: 500; }
+  .concept-tagline { font-size: 13px; color: var(--c-muted); margin-top: 4px; }
+  .concept-body { padding: 0 1.5rem 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .concept-body { grid-template-columns: 1fr; } }
+  .concept-section h3 { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--c-muted); margin-bottom: 0.5rem; }
+  .concept-section p, .concept-section li { font-size: 13px; line-height: 1.6; color: var(--c-text); }
+  .concept-section ul { padding-left: 1rem; }
+  .concept-section li { margin-bottom: 4px; }
+  .barrier-box {
+    background: var(--c-bg2);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    font-size: 13px;
+    margin-top: 0.5rem;
+  }
+  .not-box {
+    background: var(--c-coral-bg);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--c-coral-dark);
+    margin-top: 0.5rem;
+  }
+  .diff-box {
+    background: var(--c-teal-bg);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--c-teal-dark);
+    margin-top: 0.5rem;
+  }
+  .concept-full { padding: 0 1.5rem 1.5rem; }
+  .concept-full p { font-size: 13px; line-height: 1.7; margin-bottom: 0.75rem; }
+
+  .quote-block {
+    border-left: 2px solid var(--c-purple-mid);
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: var(--c-muted);
+    font-size: 13px;
+  }
+  .quote-block span { display: block; font-style: normal; font-size: 12px; margin-top: 4px; color: var(--c-muted); }
+
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 1rem;
+  }
+  .flow-step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--c-border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+  .step-content p { font-size: 12px; color: var(--c-muted); }
+
+  .open-q {
+    background: var(--c-bg2);
+    border: 0.5px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 10px;
+  }
+  .open-q .q-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 4px;
+  }
+  .q-critical { color: var(--c-coral-mid); }
+  .q-high { color: var(--c-amber-mid); }
+  .open-q h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .open-q p { font-size: 13px; color: var(--c-muted); }
+
+  .c1-header { background: var(--c-purple-bg); }
+  .c2-header { background: var(--c-teal-bg); }
+  .c3-header { background: var(--c-blue-bg); }
+
+  .c1-num, .c1-title, .c1-tagline { color: var(--c-purple-dark); }
+  .c2-num, .c2-title, .c2-tagline { color: var(--c-teal-dark); }
+  .c3-num, .c3-title, .c3-tagline { color: var(--c-blue-dark); }
+
+  .motion-box {
+    border: 0.5px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    background: var(--c-bg2);
+    margin-top: 1rem;
+    font-size: 14px;
+    text-align: center;
+    line-height: 2;
+  }
+  .motion-arrow { color: var(--c-muted); margin: 0 8px; }
+  .motion-node {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .mn-purple { background: var(--c-purple-bg); color: var(--c-purple-dark); }
+  .mn-teal { background: var(--c-teal-bg); color: var(--c-teal-dark); }
+  .mn-blue { background: var(--c-blue-bg); color: var(--c-blue-dark); }
+
+  footer {
+    border-top: 0.5px solid var(--c-border);
+    padding-top: 1.5rem;
+    font-size: 12px;
+    color: var(--c-muted);
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">HelloPM Cohort 49 · MGA 4 · Phase 2</div>
+  <h1>The <span class="em">AI Adoption Paradox</span><br>Ideation & Concept Brief</h1>
+  <p class="subtitle">Three concepts across distinct opportunity spaces · May 2026</p>
+</div>
+
+<nav>
+  <a href="#hmw">HMW Ideation</a>
+  <a href="#matrix">Idea Matrix</a>
+  <a href="#concepts">Top 3 Concepts</a>
+  <a href="#flows">User Flows</a>
+  <a href="#openq">Open Questions</a>
+</nav>
+
+<!-- HMW -->
+<section id="hmw">
+  <div class="section-label">How Might We — Ideation</div>
+  <h2>Four opportunity spaces</h2>
+  <p style="color: var(--c-muted); font-size: 13px; margin-bottom: 1rem;">These HMWs explore the behavioral, team-level, and in-context layers of the AI adoption gap.</p>
+
+  <div class="hmw-grid">
+
+    <div class="hmw-card">
+      <div class="hmw-tag tag-p3">P3 · Observable Behavior</div>
+      <h3>Work Surface</h3>
+      <div class="hmw-q"><strong>HMW</strong> surface automation candidates from what a user already does — without asking them to describe it?</div>
+      <div class="hmw-q"><strong>HMW</strong> replace "what do you want to automate?" with "here are 3 things you did this week that AI could have handled"?</div>
+      <div class="hmw-q"><strong>HMW</strong> lower the decomposition burden to zero by reading behavior, not prompting for it?</div>
+      <div class="hmw-q tag-wild" style="background:none; padding:0; border-radius:0;"><span class="hmw-tag tag-wild" style="margin:4px 0 0;">Wild idea</span> A "work twin" that passively reads your calendar + inbox for 5 days, then hands you a ranked automation shortlist — you pick one and build.</div>
+      <div class="hmw-arrow">→ WorkMirror</div>
+    </div>
+
+    <div class="hmw-card">
+      <div class="hmw-tag tag-org">Org · Team Level</div>
+
+      <h3>Team Fluency</h3>
+      <div class="hmw-q"><strong>HMW</strong> make AI adoption a team event rather than an individual journey?</div>
+      <div class="hmw-q"><strong>HMW</strong> surface the P4 practitioners already inside a team and create a structured handoff moment?</div>
+      <div class="hmw-q"><strong>HMW</strong> give a manager a lever to close the fluency gap across their entire team in one week?</div>
+      <div class="hmw-q"><span class="hmw-tag tag-wild" style="margin:0 4px 0 0;">Wild idea</span> A "fluency map" — a manager pastes in their team's job titles, the product identifies who is likely P2/P3/P4 and recommends one structured internal demo event.</div>
+      <div class="hmw-arrow">→ TeamLift</div>
+    </div>
+
+    <div class="hmw-card">
+      <div class="hmw-tag tag-p2">P2 · In-Context</div>
+      <h3>Context Pilot</h3>
+      <div class="hmw-q"><strong>HMW</strong> eliminate the context switch from "doing work" to "using AI"?</div>
+      <div class="hmw-q"><strong>HMW</strong> surface role-specific AI actions exactly when the user is already in the relevant tool?</div>
+      <div class="hmw-q"><strong>HMW</strong> make AI feel like a natural extension of Notion/Gmail/Jira rather than a separate destination?</div>
+      <div class="hmw-q"><span class="hmw-tag tag-wild" style="margin:0 4px 0 0;">Wild idea</span> A browser extension that reads page context (you're writing a PRD in Notion) and surfaces 3 AI actions a PM in your role would do right here — one click to execute.</div>
+      <div class="hmw-arrow">→ ContextPilot</div>
+    </div>
+
+    <div class="hmw-card">
+      <div class="hmw-tag tag-p2">P2/P3 · Role Reference</div>
+      <h3>Role Stack</h3>
+      <div class="hmw-q"><strong>HMW</strong> give Surbhi exactly what she asked for: "how does an ops analyst use AI to do their job better" — in a structured, searchable, role-specific format?</div>
+      <div class="hmw-q"><strong>HMW</strong> crowdsource a living, maintained "AI playbook per role" that gets richer over time?</div>
+      <div class="hmw-q"><strong>HMW</strong> replace the generic YouTube tutorial with a canonical role-specific reference that people return to?</div>
+      <div class="hmw-q"><span class="hmw-tag tag-wild" style="margin:0 4px 0 0;">Wild idea</span> A "role wiki" — 50 roles, each with 7–10 ranked workflows, ROI estimates, and a difficulty rating. Maintained by practitioners. Think "stack overflow for AI use cases, by job title."</div>
+      <div class="hmw-arrow">→ Not prioritised (content gap, but competitive moat is weak)</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="section-label">Idea Filtering Matrix</div>
+  <h2>Scored on impact, feasibility, and differentiation</h2>
+
+  <div class="matrix-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Idea</th>
+          <th>Core bet</th>
+          <th style="text-align:center">Impact</th>
+          <th style="text-align:center">Feasibility</th>
+          <th style="text-align:center">Differentiation</th>
+          <th style="text-align:center">Total</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="rank-1">
+          <td><strong>WorkMirror</strong></td>
+          <td>Replace self-reporting with behavioral observation; remove decomposition burden entirely</td>
+          <td class="score-cell">9</td>
+          <td class="score-cell">6</td>
+          <td class="score-cell">9</td>
+          <td class="total-cell">24</td>
+          <td><span class="priority-badge p-primary">#1 Primary</span></td>
+        </tr>
+        <tr class="rank-2">
+          <td><strong>TeamLift</strong></td>
+          <td>AI adoption as a team event; use internal P4s as the activation mechanism</td>
+          <td class="score-cell">9</td>
+          <td class="score-cell">7</td>
+          <td class="score-cell">9</td>
+          <td class="total-cell">25</td>
+          <td><span class="priority-badge p-second">#2 High</span></td>
+        </tr>
+        <tr class="rank-3">
+          <td><strong>ContextPilot</strong></td>
+          <td>Zero context-switch; AI surfaces inside the tools users already live in</td>
+          <td class="score-cell">8</td>
+          <td class="score-cell">5</td>
+          <td class="score-cell">8</td>
+          <td class="total-cell">21</td>
+          <td><span class="priority-badge p-third">#3 Promising</span></td>
+        </tr>
+        <tr>
+          <td>Role Stack</td>
+          <td>Canonical role-specific AI workflow reference (crowdsourced)</td>
+          <td class="score-cell">7</td>
+          <td class="score-cell">7</td>
+          <td class="score-cell">5</td>
+          <td class="total-cell">19</td>
+          <td><span class="priority-badge p-backlog">Backlog</span></td>
+        </tr>
+        <tr>
+          <td>Trigger Interceptor</td>
+          <td>Detect job-hunt / perf-review moments, deliver role-specific activation at exact trigger</td>
+          <td class="score-cell">7</td>
+          <td class="score-cell">4</td>
+          <td class="score-cell">7</td>
+          <td class="total-cell">18</td>
+          <td><span class="priority-badge p-backlog">Backlog</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top: 1rem; padding: 1rem 1.25rem; background: var(--c-bg2); border-radius: var(--radius-lg); border: 0.5px solid var(--c-border);">
+    <h3 style="font-size: 13px; margin-bottom: 4px;">Note on TeamLift vs WorkMirror ranking</h3>
+    <p style="font-size: 13px; color: var(--c-muted);">TeamLift scores highest numerically but targets the team/org layer — a completely distinct go-to-market motion from WorkMirror's individual user. That difference makes them complementary, not competing. WorkMirror is prioritised #1 in this brief because it challenges the deepest assumption in workflow-building tools: that users can self-report what they want to automate.</p>
+  </div>
+</section>
+
+<!-- TOP 3 CONCEPTS -->
+<section id="concepts">
+  <div class="section-label">Top 3 Concept Briefs</div>
+  <h2>Each concept attacks a distinct mechanism failure in the AI adoption gap</h2>
+
+  <!-- CONCEPT 1: WorkMirror -->
+  <div class="concept-card">
+    <div class="concept-header c1-header">
+      <div>
+        <div class="concept-num c1-num">Concept 1 · Behavioral Observation</div>
+        <div class="concept-title c1-title">WorkMirror</div>
+        <div class="concept-tagline c1-tagline">You shouldn't have to describe your work. The product observes it and hands you a shortlist.</div>
+      </div>
+      <span class="priority-badge p-primary" style="flex-shrink:0; margin-top:4px;">#1</span>
+    </div>
+    <div class="concept-body">
+      <div class="concept-section">
+        <h3>The barrier it breaks</h3>
+        <div class="barrier-box">The decomposition wall exists because users cannot describe their work in buildable terms when asked cold. But they already perform that work — it's all in their calendar, email, and docs. WorkMirror reads behavior and produces the spec the user couldn't write.</div>
+        <div class="quote-block">
+          "What should I automate? I don't even know where to start."
+          <span>— Composite from 5 P3 interviews</span>
+        </div>
+      </div>
+      <div class="concept-section">
+        <h3>Key features</h3>
+        <ul>
+          <li>Connects to Google Calendar + Gmail (read-only, OAuth) for a 7-day observation window</li>
+          <li>AI pattern-detection: recurring email types, manual handoffs, repeated tasks in meeting notes</li>
+          <li>Outputs a ranked "automation shortlist" — 3–5 candidates, each with estimated weekly time saved</li>
+          <li>One-click: "Build this" exports spec to a tool-agnostic brief compatible with automation tools like Zapier or n8n</li>
+          <li>Zero input from user until shortlist selection: no "what do you do?" questionnaire</li>
+        </ul>
+      </div>
+      <div class="concept-section">
+        <h3>What it is not</h3>
+        <div class="not-box">Not a monitoring tool. Not an analytics dashboard. Not a workflow builder. It is the observation layer that precedes any spec — the step that lets users skip the decomposition conversation entirely.</div>
+      </div>
+      <div class="concept-section">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">Most workflow tools ask users to self-report what they want to automate. WorkMirror removes the ask entirely. Zapier/n8n assume users arrive with a spec. The "AI watching your work" concept is scoped down here to read-only calendar+email, making it buildable without surveillance concerns.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--c-muted); margin-bottom: 6px;">Segment</h3>
+      <p>P3 Aspiring Builders who have stalled at the decomposition step — not because they lack motivation, but because they cannot name what to build when prompted in the abstract. Also serves P2 Surface Users as a low-friction entry: "Show me what I could be doing differently" requires zero prior intent to automate.</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 2: TeamLift -->
+  <div class="concept-card">
+    <div class="concept-header c2-header">
+      <div>
+        <div class="concept-num c2-num">Concept 2 · Team-Level Activation</div>
+        <div class="concept-title c2-title">TeamLift</div>
+        <div class="concept-tagline c2-tagline">The peer proof event happens organically in some teams. TeamLift engineers it — for every team.</div>
+      </div>
+      <span class="priority-badge p-second" style="flex-shrink:0; margin-top:4px;">#2</span>
+    </div>
+    <div class="concept-body">
+      <div class="concept-section">
+        <h3>The barrier it breaks</h3>
+        <div class="barrier-box">Every confirmed activation event in the research was a peer demonstration — someone in a proximate role showing a real use case from their actual work. This happens at random in some teams and never in others. TeamLift makes this event systematic, not accidental.</div>
+        <div class="quote-block">
+          "I've never seen anyone on my team use AI in a way I could copy."
+          <span>— Pattern across multiple P2/P3 profiles</span>
+        </div>
+      </div>
+      <div class="concept-section">
+        <h3>Key features</h3>
+        <ul>
+          <li>Manager enters team job titles and rough AI usage self-assessment</li>
+          <li>Product identifies likely P4 practitioners (if any) and surfaces them to the manager</li>
+          <li>Structured "Team Demo Kit": a 30-min facilitated session template where the P4 shows one workflow to the team</li>
+          <li>If no internal P4 exists: matches team to an external P4 from the same org-type for the demo session</li>
+          <li>Post-session: each team member gets a pre-filled automation spec canvas seeded from the demo they watched</li>
+          <li>Manager dashboard: team fluency stage per person, next suggested action</li>
+        </ul>
+      </div>
+      <div class="concept-section">
+        <h3>What it is not</h3>
+        <div class="not-box">Not an LMS. Not a cohort program. Not individual coaching. It is a coordination layer for a team-level activation event — the structured version of the peer moment the research says actually works.</div>
+      </div>
+      <div class="concept-section">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">Every product in the competitive landscape targets the individual. But the activation mechanism (peer proof) is inherently social. TeamLift is the only concept that targets the social unit where the mechanism actually fires. Go-to-market: B2B, sold to managers/team leads, not individual contributors.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--c-muted); margin-bottom: 6px;">Segment</h3>
+      <p>Team leads and engineering/product/ops managers (5–20 person teams) at tech and tech-adjacent companies who are aware that their team is underusing AI and want a structured lever — not another course to recommend. Distinct ICP from all existing concepts, which target individual P2/P3 contributors.</p>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3: ContextPilot -->
+  <div class="concept-card">
+    <div class="concept-header c3-header">
+      <div>
+        <div class="concept-num c3-num">Concept 3 · In-Context Layer</div>
+        <div class="concept-title c3-title">ContextPilot</div>
+        <div class="concept-tagline c3-tagline">You're in Notion writing a PRD. The AI actions for that exact moment should be right there — not in another tab.</div>
+      </div>
+      <span class="priority-badge p-third" style="flex-shrink:0; margin-top:4px;">#3</span>
+    </div>
+    <div class="concept-body">
+      <div class="concept-section">
+        <h3>The barrier it breaks</h3>
+        <div class="barrier-box">P2 users use AI daily but only for standalone tasks (drafting, summarising). They never apply AI inside their actual work context — partly because doing so requires switching to a different tool and re-establishing context. ContextPilot eliminates the switch by living inside the tools users already use.</div>
+        <div class="quote-block">
+          "By the time I've opened ChatGPT and explained what I'm doing, I've already forgotten what I needed."
+          <span>— Illustrative composite, P2 Surface User</span>
+        </div>
+      </div>
+      <div class="concept-section">
+        <h3>Key features</h3>
+        <ul>
+          <li>Browser extension: reads page URL + DOM context (Notion doc type, Gmail thread, Jira ticket, Google Sheet)</li>
+          <li>Role setup (one-time, 2 minutes): "I am a PM at a B2B SaaS company"</li>
+          <li>Surfaces 3 contextual AI actions right on the page — no new tab needed</li>
+          <li>Actions are role-specific and page-specific: "Summarise this PRD's open decisions", "Draft acceptance criteria for this ticket", "Flag missing sections vs PRD template"</li>
+          <li>Each action runs, returns output inline — user can accept, edit, or dismiss</li>
+          <li>"Teach a new action": user can describe a recurring manual step and ContextPilot adds it to their personal action library</li>
+        </ul>
+      </div>
+      <div class="concept-section">
+        <h3>What it is not</h3>
+        <div class="not-box">Not a standalone AI chat product. Not a Notion AI replacement. Not a general browser assistant. It is a role-specific, context-aware action surface — the bridge between the work context and AI capability that currently requires a full context switch.</div>
+      </div>
+      <div class="concept-section">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">Most AI learning and workflow products are destinations the user goes to. ContextPilot comes to the user. The competitive risk is Notion AI / Google's built-in AI features — but those are tool-native, not role-aware across tools. The moat is the cross-tool, role-specific action layer.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--c-muted); margin-bottom: 6px;">Segment</h3>
+      <p>P2 Surface Users who already use AI but only in isolation. They open ChatGPT in one tab and Notion in another — never connecting them. ContextPilot collapses that gap without requiring any intent to "learn AI" or "build automations." The value proposition is immediate and passive: you get smarter actions in the tools you already use.</p>
+    </div>
+  </div>
+
+  <!-- Integrated motion -->
+  <div style="margin-top: 1.5rem;">
+    <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 0.5rem;">The integrated motion — how the three concepts compose</h3>
+    <p style="font-size: 13px; color: var(--c-muted); margin-bottom: 0.75rem;">Each concept operates at a different layer — behavioral observation, team coordination, and in-context action — and can be evaluated independently or combined into a single product motion.</p>
+    <div class="motion-box">
+      <span class="motion-node mn-purple">WorkMirror</span>
+      <span class="motion-arrow">observes behavior →</span>
+      <span class="motion-node mn-purple">generates spec</span>
+      <span class="motion-arrow">→</span>
+      <span class="motion-node mn-teal">user builds & ships</span>
+      <br>
+      <span style="font-size: 12px; color: var(--c-muted);">Individual path — zero-input entry to first automation</span>
+      <br><br>
+      <span class="motion-node mn-teal">TeamLift</span>
+      <span class="motion-arrow">engineers peer demo →</span>
+      <span class="motion-node mn-teal">team sees proof</span>
+      <span class="motion-arrow">→</span>
+      <span class="motion-node mn-teal">each member gets pre-seeded spec</span>
+      <br>
+      <span style="font-size: 12px; color: var(--c-muted);">Team path — peer proof at scale, not by accident</span>
+      <br><br>
+      <span class="motion-node mn-blue">ContextPilot</span>
+      <span class="motion-arrow">surfaces actions in-situ →</span>
+      <span class="motion-node mn-blue">activates P2 in their existing tools</span>
+      <span class="motion-arrow">→</span>
+      <span class="motion-node mn-blue">builds habit before intent</span>
+      <br>
+      <span style="font-size: 12px; color: var(--c-muted);">In-context path — lowest friction entry, no prior intent to "do AI" required</span>
+    </div>
+  </div>
+</section>
+
+<!-- USER FLOWS -->
+<section id="flows">
+  <div class="section-label">User Flows — Integrated</div>
+  <h2>How a stuck professional moves through each concept</h2>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+
+    <div>
+      <h3 style="margin-bottom: 0.5rem; font-size: 14px; font-weight: 500; color: var(--c-purple-mid);">WorkMirror — P3 Aspiring Builder</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-purple-bg); color:var(--c-purple-dark);">1</div>
+          <div class="step-content"><h4>Connect work calendar</h4><p>OAuth to Google Calendar + Gmail. 30-second setup. "Observe my week."</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-purple-bg); color:var(--c-purple-dark);">2</div>
+          <div class="step-content"><h4>7-day passive observation</h4><p>No action required. AI reads patterns: recurring meeting prep, status email threads, manual data collation.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-purple-bg); color:var(--c-purple-dark);">3</div>
+          <div class="step-content"><h4>Receive shortlist</h4><p>"Here are 4 automation candidates from your actual last week. Ranked by estimated time saved."</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-purple-bg); color:var(--c-purple-dark);">4</div>
+          <div class="step-content"><h4>Select one. Spec is pre-filled.</h4><p>Trigger, inputs, steps, output — pre-written from observation. User edits, not creates from scratch.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-purple-bg); color:var(--c-purple-dark);">5</div>
+          <div class="step-content"><h4>"Build this" handoff</h4><p>Exports spec to a tool-agnostic brief. User takes it directly to Zapier, n8n, or a developer.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom: 0.5rem; font-size: 14px; font-weight: 500; color: var(--c-teal-mid);">TeamLift — Team Lead (B2B)</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-teal-bg); color:var(--c-teal-dark);">1</div>
+          <div class="step-content"><h4>Manager enters team</h4><p>5 job titles, rough "how much does each person use AI?" self-assessment. 5 minutes.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-teal-bg); color:var(--c-teal-dark);">2</div>
+          <div class="step-content"><h4>Fluency map generated</h4><p>Team mapped to P2/P3/P4 profiles. "You have 1 likely P4 and 4 P2s." P4 identified by name.</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-teal-bg); color:var(--c-teal-dark);">3</div>
+          <div class="step-content"><h4>Demo Kit delivered</h4><p>Manager receives: 30-min session guide, P4 receives: structured "what to show" template (1 real workflow, 3 key moments).</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-teal-bg); color:var(--c-teal-dark);">4</div>
+          <div class="step-content"><h4>Session runs. Peer proof fires.</h4><p>"This is Anjali, she's a PM like you. She's going to show you one thing she built last week."</p></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-num" style="background:var(--c-teal-bg); color:var(--c-teal-dark);">5</div>
+          <div class="step-content"><h4>Post-session: individual follow-up</h4><p>Each attendee receives a pre-seeded automation spec from the workflow they just saw. First step is taken, not imagined.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top: 1.5rem;">
+    <h3 style="margin-bottom: 0.5rem; font-size: 14px; font-weight: 500; color: var(--c-blue-mid);">ContextPilot — P2 Surface User (in Notion)</h3>
+    <div class="flow-steps" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0; border: 0.5px solid var(--c-border); border-radius: var(--radius-lg); overflow: hidden;">
+      <div style="padding: 12px; border-right: 0.5px solid var(--c-border);">
+        <div class="step-num" style="background:var(--c-blue-bg); color:var(--c-blue-dark); margin-bottom:6px;">1</div>
+        <h4 style="font-size:13px; font-weight:500; margin-bottom:4px;">User opens Notion PRD</h4>
+        <p style="font-size:12px; color:var(--c-muted);">Extension detects: "Notion document, role = PM." No action needed from user.</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--c-border);">
+        <div class="step-num" style="background:var(--c-blue-bg); color:var(--c-blue-dark); margin-bottom:6px;">2</div>
+        <h4 style="font-size:13px; font-weight:500; margin-bottom:4px;">3 actions surface</h4>
+        <p style="font-size:12px; color:var(--c-muted);">"Flag missing sections" / "Draft open questions" / "Summarise for eng handoff" — floating panel, right side.</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--c-border);">
+        <div class="step-num" style="background:var(--c-blue-bg); color:var(--c-blue-dark); margin-bottom:6px;">3</div>
+        <h4 style="font-size:13px; font-weight:500; margin-bottom:4px;">One click. Output inline.</h4>
+        <p style="font-size:12px; color:var(--c-muted);">Result appears as a draft in the doc. User accepts, edits, or dismisses. Zero context switch.</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--c-border);">
+        <div class="step-num" style="background:var(--c-blue-bg); color:var(--c-blue-dark); margin-bottom:6px;">4</div>
+        <h4 style="font-size:13px; font-weight:500; margin-bottom:4px;">User saves a custom action</h4>
+        <p style="font-size:12px; color:var(--c-muted);">"I always do X in this context." Teaches ContextPilot, builds personal action library over time.</p>
+      </div>
+      <div style="padding: 12px;">
+        <div class="step-num" style="background:var(--c-blue-bg); color:var(--c-blue-dark); margin-bottom:6px;">5</div>
+        <h4 style="font-size:13px; font-weight:500; margin-bottom:4px;">Weekly usage summary</h4>
+        <p style="font-size:12px; color:var(--c-muted);">"You've used 7 AI actions this week. Here's your most-used one — want to turn it into a full automation?"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN QUESTIONS -->
+<section id="openq">
+  <div class="section-label">Open Questions for Phase 3</div>
+  <h2>What must be resolved before any of these are built</h2>
+
+  <div class="open-q">
+    <div class="q-label q-critical">Critical — WorkMirror</div>
+    <h4>Will users consent to calendar + email access for a product they've never used?</h4>
+    <p>Privacy anxiety is the primary adoption risk for WorkMirror. The product requires read access before delivering any value. Test: offer a "demo mode" using a fake calendar and measure conversion to real OAuth grant. If conversion from demo → real data is below 30%, the product needs a different entry point (e.g., user pastes their own calendar export rather than granting live access).</p>
+  </div>
+
+  <div class="open-q">
+    <div class="q-label q-critical">Critical — TeamLift</div>
+    <h4>Does the manager have enough pull to make their team attend a structured AI session?</h4>
+    <p>TeamLift requires manager buy-in AND team participation. If team-level adoption is entirely voluntary (no meeting block, no manager framing), participation may be low. Test: run a single 30-min facilitated session with a real team and measure: (a) did everyone attend, (b) did any individual build something in the following week, (c) did the manager consider it worth the team's time?</p>
+  </div>
+
+  <div class="open-q">
+    <div class="q-label q-critical">Critical — TeamLift</div>
+    <h4>Is the P4 inside the team the right activator — or does internal status complicate peer demonstration?</h4>
+    <p>The research found peer-proximate demonstration activates. But the internal P4 is a colleague with existing dynamics (perceived as "the AI person", possible status threat). An external same-role P4 might activate more cleanly. Need at least 3 team-level interviews with managers to determine whether internal or external peer is a cleaner mechanism before building the team matching feature.</p>
+  </div>
+
+  <div class="open-q">
+    <div class="q-label q-high">High — WorkMirror</div>
+    <h4>Does WorkMirror challenge the deepest assumption in workflow tools?</h4>
+    <p>The core bet is that users can't describe their work cold, but they've already performed it. Test this assumption with 5 P3 users: show them a pre-generated shortlist from their own calendar data and measure whether they can immediately identify one item as worth building — versus asking them the same question unprompted.</p>
+  </div>
+
+  <div class="open-q">
+    <div class="q-label q-high">High — All three</div>
+    <h4>Do any of these address the P3-to-P4 crossing, or are they P2-layer products?</h4>
+    <p>WorkMirror and ContextPilot primarily serve P2 surface users (surface more usage, lower friction). TeamLift serves teams anchored at P2. None of the three directly produce workflow construction fluency — the second crossing that defines P4. If the goal is the P3→P4 gap specifically, these concepts may need pairing with a downstream accountability mechanism to be viable as a full intervention.</p>
+  </div>
+
+</section>
+
+<footer>
+  HelloPM Cohort 49 · MGA 4 · Phase 2 · May 2026 &nbsp;·&nbsp; Concepts: WorkMirror, TeamLift, ContextPilot
+</footer>
+
+</body>
+</html>
