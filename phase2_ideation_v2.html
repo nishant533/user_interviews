@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MGA4 · Phase 2 · AI Adoption Paradox — Ideation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg2: #f7f6f2;
+    --bg3: #f0ede6;
+    --text: #1a1a1a;
+    --muted: #5f5e5a;
+    --border: rgba(0,0,0,0.1);
+    --purple: #534AB7;
+    --purple-bg: #eeedfe;
+    --purple-dark: #3c3489;
+    --teal: #0F6E56;
+    --teal-bg: #e1f5ee;
+    --teal-dark: #085041;
+    --coral: #993C1D;
+    --coral-bg: #faece7;
+    --coral-dark: #4A1B0C;
+    --amber: #BA7517;
+    --amber-bg: #faeeda;
+    --amber-dark: #412402;
+    --blue: #185FA5;
+    --blue-bg: #e6f1fb;
+    --blue-dark: #042C53;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg2: #242422; --bg3: #2c2c2a;
+      --text: #e8e6df; --muted: #a0a09a; --border: rgba(255,255,255,0.1);
+      --purple: #afa9ec; --purple-bg: #26215c; --purple-dark: #eeedfe;
+      --teal: #5dcaa5; --teal-bg: #04342c; --teal-dark: #e1f5ee;
+      --coral: #f0997b; --coral-bg: #4a1b0c; --coral-dark: #faece7;
+      --amber: #ef9f27; --amber-bg: #412402; --amber-dark: #faeeda;
+      --blue: #85b7eb; --blue-bg: #042c53; --blue-dark: #e6f1fb;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+  /* Hero */
+  .hero { border-bottom: 0.5px solid var(--border); padding-bottom: 2rem; margin-bottom: 2.5rem; }
+  .eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  h1 { font-size: 30px; font-weight: 500; line-height: 1.25; margin-bottom: 0.5rem; }
+  .em { color: var(--purple); font-style: italic; }
+  .subtitle { color: var(--muted); font-size: 14px; }
+
+  /* Problem Context Banner */
+  .problem-banner { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 3rem; }
+  .pb-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+  .pb-tag { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; padding: 2px 8px; border-radius: var(--radius-sm); display: inline-block; margin-bottom: 8px; }
+  .pb-p1 { background: var(--purple-bg); color: var(--purple-dark); }
+  .pb-p2 { background: var(--teal-bg); color: var(--teal-dark); }
+  .pb-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .pb-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  /* Nav */
+  nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 3rem; }
+  nav a { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--border); border-radius: var(--radius-sm); color: var(--muted); text-decoration: none; background: var(--bg2); }
+  nav a:hover { color: var(--text); border-color: var(--purple); }
+
+  /* Section */
+  section { margin-bottom: 4rem; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--border); }
+  h2 { font-size: 20px; font-weight: 500; margin-bottom: 0.5rem; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
+
+  /* HMW bucket */
+  .hmw-bucket { margin-bottom: 2rem; }
+  .bucket-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
+  .bucket-tag { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--radius-sm); }
+  .bt-p1 { background: var(--purple-bg); color: var(--purple-dark); }
+  .bt-p2 { background: var(--teal-bg); color: var(--teal-dark); }
+  .bt-both { background: var(--amber-bg); color: var(--amber-dark); }
+  .bucket-title { font-size: 15px; font-weight: 500; }
+  .hmw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .hmw-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+  .hmw-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+  .hmw-q { font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.55; }
+  .hmw-q strong { color: var(--text); font-weight: 500; }
+  .wild { font-size: 12px; line-height: 1.55; margin-top: 8px; padding: 8px 10px; background: var(--bg3); border-radius: var(--radius-sm); border-left: 2px solid var(--amber); color: var(--muted); }
+  .wild b { color: var(--amber); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 3px; }
+  .hmw-arrow { font-size: 12px; font-weight: 500; color: var(--purple); margin-top: 10px; }
+
+  /* Matrix */
+  .matrix-wrap { overflow-x: auto; margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--bg3); font-weight: 500; text-align: left; padding: 8px 12px; border: 0.5px solid var(--border); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  td { padding: 9px 12px; border: 0.5px solid var(--border); vertical-align: top; font-size: 13px; }
+  .score { font-weight: 500; text-align: center; }
+  .total { font-weight: 500; color: var(--purple); text-align: center; font-size: 14px; }
+  .r1 td { background: var(--purple-bg); }
+  .r2 td { background: var(--teal-bg); }
+  .r3 td { background: var(--blue-bg); }
+  .pri { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--radius-sm); white-space: nowrap; }
+  .pri-1 { background: var(--purple-bg); color: var(--purple-dark); }
+  .pri-2 { background: var(--teal-bg); color: var(--teal-dark); }
+  .pri-3 { background: var(--blue-bg); color: var(--blue-dark); }
+  .pri-b { background: var(--bg3); color: var(--muted); }
+  .solves-tag { font-size: 11px; font-weight: 500; padding: 2px 6px; border-radius: var(--radius-sm); display: inline-block; margin-bottom: 3px; }
+  .s-p1 { background: var(--purple-bg); color: var(--purple-dark); }
+  .s-p2 { background: var(--teal-bg); color: var(--teal-dark); }
+  .s-both { background: var(--amber-bg); color: var(--amber-dark); }
+
+  /* Concept cards */
+  .concept { border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 2rem; }
+  .concept-head { padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .ch-purple { background: var(--purple-bg); }
+  .ch-teal   { background: var(--teal-bg); }
+  .ch-blue   { background: var(--blue-bg); }
+  .ch-amber  { background: var(--amber-bg); }
+  .c-eyebrow { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .ep { color: var(--purple-dark); } .et { color: var(--teal-dark); } .eb { color: var(--blue-dark); } .ea { color: var(--amber-dark); }
+  .c-title { font-size: 22px; font-weight: 500; }
+  .tp { color: var(--purple-dark); } .tt { color: var(--teal-dark); } .tb { color: var(--blue-dark); } .ta { color: var(--amber-dark); }
+  .c-tagline { font-size: 13px; margin-top: 4px; }
+  .lgp { color: var(--purple); } .lgt { color: var(--teal); } .lgb { color: var(--blue); } .lga { color: var(--amber); }
+  .c-badge { flex-shrink: 0; }
+  .concept-body { padding: 1.25rem 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 600px) { .concept-body { grid-template-columns: 1fr; } .problem-banner { grid-template-columns: 1fr; } }
+  .cs h3 { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 6px; }
+  .cs p, .cs li { font-size: 13px; line-height: 1.6; }
+  .cs ul { padding-left: 1rem; }
+  .cs li { margin-bottom: 4px; color: var(--text); }
+  .barrier-box { background: var(--bg2); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13px; color: var(--muted); }
+  .not-box { background: var(--coral-bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13px; color: var(--coral-dark); }
+  .diff-box { background: var(--teal-bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13px; color: var(--teal-dark); }
+  .quote { border-left: 2px solid var(--purple); padding: 6px 0 6px 12px; margin: 10px 0; font-style: italic; font-size: 13px; color: var(--muted); }
+  .quote span { display: block; font-style: normal; font-size: 11px; margin-top: 4px; }
+  .concept-full { padding: 0 1.5rem 1.5rem; }
+  .concept-full p { font-size: 13px; line-height: 1.7; }
+  .cs-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 4px; }
+
+  /* Flows */
+  .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (max-width: 600px) { .flow-grid { grid-template-columns: 1fr; } }
+  .flow-box h3 { font-size: 13px; font-weight: 500; margin-bottom: 0.75rem; }
+  .flow-step { display: flex; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); align-items: flex-start; }
+  .flow-step:last-child { border-bottom: none; }
+  .step-n { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+  .sn-p { background: var(--purple-bg); color: var(--purple-dark); }
+  .sn-t { background: var(--teal-bg); color: var(--teal-dark); }
+  .sn-b { background: var(--blue-bg); color: var(--blue-dark); }
+  .sn-a { background: var(--amber-bg); color: var(--amber-dark); }
+  .step-content h4 { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .step-content p { font-size: 12px; color: var(--muted); }
+
+  /* Open Qs */
+  .oq { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 10px; }
+  .oq-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+  .ql-crit { color: var(--coral); }
+  .ql-high { color: var(--amber); }
+  .oq h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .oq p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  footer { border-top: 0.5px solid var(--border); padding-top: 1.5rem; font-size: 12px; color: var(--muted); margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">HelloPM Cohort 49 · MGA 4 · Phase 2</div>
+  <h1>The <span class="em">AI Adoption Paradox</span><br>Ideation & Concept Brief</h1>
+  <p class="subtitle">Focused on Pain Points 1 & 2 — role-specificity gap and the decomposition wall · May 2026</p>
+</div>
+
+<!-- PROBLEM CONTEXT -->
+<div class="problem-banner">
+  <div class="pb-card">
+    <span class="pb-tag pb-p1">Pain Point 1</span>
+    <div class="pb-title">No role-specific reference point</div>
+    <div class="pb-desc">Professionals can't start using AI meaningfully because they've never seen someone in their exact role do it.</div>
+  </div>
+  <div class="pb-card">
+    <span class="pb-tag pb-p2">Pain Point 2</span>
+    <div class="pb-title">The decomposition wall</div>
+    <div class="pb-desc">Professionals know they want to automate something but can't name the trigger, steps, or output — so they never start.</div>
+  </div>
+</div>
+
+<nav>
+  <a href="#hmw">HMW Ideation</a>
+  <a href="#matrix">Idea Matrix</a>
+  <a href="#concepts">Top 3 Concepts</a>
+  <a href="#flows">User Flows</a>
+  <a href="#openq">Open Questions</a>
+</nav>
+
+<!-- HMW -->
+<section id="hmw">
+  <div class="section-label">How Might We — Ideation</div>
+  <h2>Three buckets of opportunity</h2>
+  <p class="section-sub">Ideas are separated by which pain point they address — and where they address both at once.</p>
+
+  <!-- Bucket 1: Solves PP1 -->
+  <div class="hmw-bucket">
+    <div class="bucket-header">
+      <span class="bucket-tag bt-p1">Solves Pain Point 1 only</span>
+      <span class="bucket-title">Role visibility — showing people what's possible in their job</span>
+    </div>
+    <div class="hmw-grid">
+
+      <div class="hmw-card">
+        <h3>RoleRadar</h3>
+        <div class="hmw-q"><strong>HMW</strong> show a user what AI looks like for their exact job — without asking them to search for it?</div>
+        <div class="hmw-q"><strong>HMW</strong> replace the generic "AI for PMs" YouTube video with a structured, ranked list of what PMs like Surbhi actually do?</div>
+        <div class="hmw-q"><strong>HMW</strong> make role-specific AI use cases discoverable the way LinkedIn shows you jobs — based on who you are, not what you search?</div>
+        <div class="wild"><b>Wild idea</b> You enter your job title and company type. The product surfaces the top 7 AI use cases for your role, ranked by how many similar professionals have used them — each with a one-paragraph "here's exactly how it works for me."</div>
+        <div class="hmw-arrow">→ RoleRadar</div>
+      </div>
+
+      <div class="hmw-card">
+        <h3>ShadowShift</h3>
+        <div class="hmw-q"><strong>HMW</strong> give someone a live, unedited view of a same-role professional's AI-assisted workday?</div>
+        <div class="hmw-q"><strong>HMW</strong> make peer proof accessible without requiring a personal connection?</div>
+        <div class="hmw-q"><strong>HMW</strong> create a "job shadow" experience but for AI usage — 20 minutes with someone in your exact role showing their actual screen?</div>
+        <div class="wild"><b>Wild idea</b> A structured "shadow session" — 20 mins, same job title, one person shows three real AI moments from their week. Not a tutorial. Not a course. Just a screen share of real work.</div>
+        <div class="hmw-arrow">→ ShadowShift</div>
+      </div>
+
+      <div class="hmw-card">
+        <h3>RoleProof</h3>
+        <div class="hmw-q"><strong>HMW</strong> build a crowdsourced library of short "this is how I use AI for my job" clips — searchable by role and task, not by tool?</div>
+        <div class="hmw-q"><strong>HMW</strong> replace aspirational influencer content with authentic, unglamorous proof from real practitioners?</div>
+        <div class="hmw-q"><strong>HMW</strong> make it as easy to find "AI for ops analyst" as it is to find a recipe?</div>
+        <div class="wild"><b>Wild idea</b> A searchable library of 2-minute screen recordings tagged by role, company size, and task type. Not polished — raw, real, relatable. "Here's what changed for me on a Tuesday."</div>
+        <div class="hmw-arrow">→ RoleProof</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bucket 2: Solves PP2 -->
+  <div class="hmw-bucket">
+    <div class="bucket-header">
+      <span class="bucket-tag bt-p2">Solves Pain Point 2 only</span>
+      <span class="bucket-title">Decomposition — helping people describe and spec their own work</span>
+    </div>
+    <div class="hmw-grid">
+
+      <div class="hmw-card">
+        <h3>WorkBreaker</h3>
+        <div class="hmw-q"><strong>HMW</strong> translate plain-English work frustrations into structured automation specs — without requiring the user to know what a "trigger" is?</div>
+        <div class="hmw-q"><strong>HMW</strong> replace "what do you want to automate?" with "what's the thing you dread doing every Monday?"</div>
+        <div class="hmw-q"><strong>HMW</strong> make decomposition a conversation, not a form?</div>
+        <div class="wild"><b>Wild idea</b> A 5-message conversation: "Describe your most annoying recurring task in plain English." AI asks 3 follow-up questions, then outputs a complete trigger-steps-output spec ready to hand to any automation tool.</div>
+        <div class="hmw-arrow">→ WorkBreaker</div>
+      </div>
+
+      <div class="hmw-card">
+        <h3>TaskScan</h3>
+        <div class="hmw-q"><strong>HMW</strong> surface automation candidates by reading what someone already has — their JD, meeting notes, or inbox — rather than asking them to recall it?</div>
+        <div class="hmw-q"><strong>HMW</strong> give someone a pre-built shortlist of what to automate before they've thought about it?</div>
+        <div class="hmw-q"><strong>HMW</strong> lower the cognitive load of "what should I build?" to near zero?</div>
+        <div class="wild"><b>Wild idea</b> Paste your job description or last week's meeting notes. TaskScan identifies 3-5 automation candidates and writes the spec for each. No form, no questions — just paste and receive.</div>
+        <div class="hmw-arrow">→ TaskScan</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bucket 3: Solves both -->
+  <div class="hmw-bucket">
+    <div class="bucket-header">
+      <span class="bucket-tag bt-both">Solves both Pain Points 1 + 2</span>
+      <span class="bucket-title">Role proof + decomposition — see it in your role, then spec it for your work</span>
+    </div>
+    <div class="hmw-grid">
+
+      <div class="hmw-card">
+        <h3>RoleSpec</h3>
+        <div class="hmw-q"><strong>HMW</strong> show someone what people in their role have built AND hand them the spec to replicate it — in one step?</div>
+        <div class="hmw-q"><strong>HMW</strong> turn peer proof into a directly executable artifact, not just inspiration?</div>
+        <div class="hmw-q"><strong>HMW</strong> collapse "I've never seen my role do this" and "I don't know how to describe it" into a single solved problem?</div>
+        <div class="wild"><b>Wild idea</b> A library of role-specific, pre-decomposed automation specs — built by real practitioners. You pick your role, browse 10 real workflows, tap one, and the full spec (trigger, steps, output, tools needed) is already written. You just adapt it to your context.</div>
+        <div class="hmw-arrow">→ RoleSpec</div>
+      </div>
+
+      <div class="hmw-card">
+        <h3>PeerBuild</h3>
+        <div class="hmw-q"><strong>HMW</strong> pair someone with a same-role peer who doesn't just demo their workflow but helps the user map it to their own job?</div>
+        <div class="hmw-q"><strong>HMW</strong> make peer proof productive — not just inspiring but directly translating into the user's first buildable spec?</div>
+        <div class="hmw-q"><strong>HMW</strong> turn the activation moment into the decomposition moment simultaneously?</div>
+        <div class="wild"><b>Wild idea</b> A structured 30-min session: same-role peer shows ONE workflow (proof), then together they map it to the user's context (decomposition). Session ends with a filled spec the user owns. Facilitated by a template, not a mentor.</div>
+        <div class="hmw-arrow">→ PeerBuild</div>
+      </div>
+
+      <div class="hmw-card">
+        <h3>FirstSpec</h3>
+        <div class="hmw-q"><strong>HMW</strong> give a user their first automation spec in under 10 minutes — grounded in what real people in their role have built?</div>
+        <div class="hmw-q"><strong>HMW</strong> use role-specific examples as the input to a personal decomposition, not just inspiration?</div>
+        <div class="hmw-q"><strong>HMW</strong> make "I've never done this" feel like "I'm just adapting something that already exists"?</div>
+        <div class="wild"><b>Wild idea</b> You enter your role and one sentence about your work. The product shows you the 3 closest workflows built by people like you, then asks "which of these is closest to your situation?" — and uses your answer to pre-fill your personal spec. Role proof leads, decomposition follows.</div>
+        <div class="hmw-arrow">→ FirstSpec</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="matrix">
+  <div class="section-label">Idea Filtering Matrix</div>
+  <h2>Scored on impact, feasibility, and differentiation</h2>
+  <p class="section-sub">Ideas tagged by which pain point they solve. Scored 1–10 each axis.</p>
+
+  <div class="matrix-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Idea</th>
+          <th>Solves</th>
+          <th>Core bet</th>
+          <th style="text-align:center">Impact</th>
+          <th style="text-align:center">Feasibility</th>
+          <th style="text-align:center">Differentiation</th>
+          <th style="text-align:center">Total</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="r1">
+          <td><strong>RoleSpec</strong></td>
+          <td><span class="solves-tag s-both">Both</span></td>
+          <td>Pre-decomposed, role-specific specs built by real practitioners — proof and spec in one artifact</td>
+          <td class="score">9</td>
+          <td class="score">8</td>
+          <td class="score">9</td>
+          <td class="total">26</td>
+          <td><span class="pri pri-1">#1 Primary</span></td>
+        </tr>
+        <tr class="r2">
+          <td><strong>PeerBuild</strong></td>
+          <td><span class="solves-tag s-both">Both</span></td>
+          <td>Same-role peer session that activates AND produces a filled spec — proof leads, decomposition follows</td>
+          <td class="score">9</td>
+          <td class="score">6</td>
+          <td class="score">8</td>
+          <td class="total">23</td>
+          <td><span class="pri pri-2">#2 High</span></td>
+        </tr>
+        <tr class="r3">
+          <td><strong>WorkBreaker</strong></td>
+          <td><span class="solves-tag s-p2">PP2</span></td>
+          <td>Conversational decomposition — turns plain-English frustrations into buildable specs</td>
+          <td class="score">8</td>
+          <td class="score">8</td>
+          <td class="score">7</td>
+          <td class="total">23</td>
+          <td><span class="pri pri-3">#3 Promising</span></td>
+        </tr>
+        <tr>
+          <td>FirstSpec</td>
+          <td><span class="solves-tag s-both">Both</span></td>
+          <td>Role examples as input to personal decomposition — "adapt this" not "create from scratch"</td>
+          <td class="score">8</td>
+          <td class="score">7</td>
+          <td class="score">7</td>
+          <td class="total">22</td>
+          <td><span class="pri pri-b">Backlog</span></td>
+        </tr>
+        <tr>
+          <td>RoleRadar</td>
+          <td><span class="solves-tag s-p1">PP1</span></td>
+          <td>Personalised role-based AI use case discovery — LinkedIn for AI workflows</td>
+          <td class="score">7</td>
+          <td class="score">7</td>
+          <td class="score">6</td>
+          <td class="total">20</td>
+          <td><span class="pri pri-b">Backlog</span></td>
+        </tr>
+        <tr>
+          <td>TaskScan</td>
+          <td><span class="solves-tag s-p2">PP2</span></td>
+          <td>Paste JD or meeting notes → receive automation shortlist with pre-written specs</td>
+          <td class="score">7</td>
+          <td class="score">7</td>
+          <td class="score">6</td>
+          <td class="total">20</td>
+          <td><span class="pri pri-b">Backlog</span></td>
+        </tr>
+        <tr>
+          <td>ShadowShift</td>
+          <td><span class="solves-tag s-p1">PP1</span></td>
+          <td>Live 20-min screen share with same-role peer — raw, real, no polish</td>
+          <td class="score">8</td>
+          <td class="score">5</td>
+          <td class="score">7</td>
+          <td class="total">20</td>
+          <td><span class="pri pri-b">Backlog</span></td>
+        </tr>
+        <tr>
+          <td>RoleProof</td>
+          <td><span class="solves-tag s-p1">PP1</span></td>
+          <td>Crowdsourced 2-min screen recordings, tagged by role + task — raw, searchable</td>
+          <td class="score">6</td>
+          <td class="score">6</td>
+          <td class="score">5</td>
+          <td class="total">17</td>
+          <td><span class="pri pri-b">Backlog</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top: 1rem; padding: 1rem 1.25rem; background: var(--bg2); border-radius: var(--radius); border: 0.5px solid var(--border);">
+    <p style="font-size: 13px; color: var(--muted);">Ideas that solve both pain points score highest because Pain Points 1 and 2 are tightly coupled — seeing what's possible in your role (PP1) is what unlocks the motivation to decompose your own work (PP2). Solving them together is more efficient than sequencing them. WorkBreaker ranks alongside PeerBuild because it is the most buildable high-impact standalone — useful even if PP1 is solved by other means.</p>
+  </div>
+</section>
+
+<!-- CONCEPTS -->
+<section id="concepts">
+  <div class="section-label">Top 3 Concept Briefs</div>
+  <h2>Each concept attacks a different layer of the same root problem</h2>
+
+  <!-- C1: RoleSpec -->
+  <div class="concept">
+    <div class="concept-head ch-purple">
+      <div>
+        <div class="c-eyebrow ep">Concept 1 · Solves Both · Role Library + Decomposition</div>
+        <div class="c-title tp">RoleSpec</div>
+        <div class="c-tagline lgp">A library of real automation specs built by people in your exact role. Pick one. Adapt it. Build it.</div>
+      </div>
+      <span class="pri pri-1" style="flex-shrink:0; margin-top:4px;">#1</span>
+    </div>
+    <div class="concept-body">
+      <div class="cs">
+        <h3>The barriers it breaks</h3>
+        <div class="barrier-box">PP1: You've never seen someone in your role do this. PP2: You can't describe what you'd build. RoleSpec solves both simultaneously — you browse real specs from real practitioners in your role, pick the closest one, and the decomposition is already done for you. You adapt, not create from scratch.</div>
+        <div class="quote">"I've never seen a video that says here's how an ops analyst uses AI to do their job better."<span>— Surbhi, Ops Analyst</span></div>
+      </div>
+      <div class="cs">
+        <h3>Key features</h3>
+        <ul>
+          <li>Role onboarding: job title + company type (2 fields, 60 seconds)</li>
+          <li>Browse 10–15 pre-built specs from real practitioners in that role — each with: what it does, time saved per week, tools needed, difficulty rating</li>
+          <li>Every spec is structured: trigger → steps → output → edge cases</li>
+          <li>"Make it mine" flow: 3 questions that adapt the spec to your specific context</li>
+          <li>Export to Zapier / n8n / plain doc — one click</li>
+          <li>Practitioners contribute specs (earn visibility); specs are reviewed for quality before publishing</li>
+        </ul>
+      </div>
+      <div class="cs">
+        <h3>What it is not</h3>
+        <div class="not-box">Not a course. Not a tutorial. Not a prompt library. It is a role-specific, practitioner-built, structured automation spec library — the thing between "I want to automate something" and "I know exactly what to build."</div>
+      </div>
+      <div class="cs">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">YouTube has tutorials but they're tool-centric, not role-centric. ADPList has peers but sessions are unstructured. Zapier has templates but they're not role-aware. No product gives you a pre-written spec grounded in what someone with your actual job title has built. The role-spec layer is unbuilt.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <div class="cs-label">Segment</div>
+      <p style="font-size:13px; color:var(--muted);">P2-new professionals (ops analysts, PMs, marketing managers, support leads) who are aware AI could help their job, have never seen it done for their role, and cannot describe what to build when asked. They need proof and a spec, not a course.</p>
+    </div>
+  </div>
+
+  <!-- C2: PeerBuild -->
+  <div class="concept">
+    <div class="concept-head ch-teal">
+      <div>
+        <div class="c-eyebrow et">Concept 2 · Solves Both · Live Peer Activation + Spec</div>
+        <div class="c-title tt">PeerBuild</div>
+        <div class="c-tagline lgt">A structured 30-min session: same-role peer shows one workflow, then helps you map it to your own job. You leave with a spec, not just inspiration.</div>
+      </div>
+      <span class="pri pri-2" style="flex-shrink:0; margin-top:4px;">#2</span>
+    </div>
+    <div class="concept-body">
+      <div class="cs">
+        <h3>The barriers it breaks</h3>
+        <div class="barrier-box">PP1: The strongest finding in the research — same-role peer proof is the activation event, not content. PP2: The session doesn't end with inspiration, it ends with a filled decomposition spec. The peer proof moment and the decomposition moment are the same event — engineered, not accidental.</div>
+        <div class="quote">"I even need to know what questions to ask."<span>— Saransh, Principal IC PM</span></div>
+      </div>
+      <div class="cs">
+        <h3>Key features</h3>
+        <ul>
+          <li>Match by job title + org type (not industry alone — research confirmed this)</li>
+          <li>Structured session template: Part 1 (15 min) — peer shows one real workflow from their actual job. Part 2 (15 min) — guided mapping: "Which part of this applies to your work?"</li>
+          <li>Session ends with a shared doc: the peer's spec + the user's adapted version, side by side</li>
+          <li>Facilitator guide ensures Part 2 always produces a spec — not open-ended chat</li>
+          <li>Peers are rated on whether the attendee built something within 7 days</li>
+          <li>Async fallback: if no live peer available, access a recorded session from same role + org type with a guided adaptation worksheet</li>
+        </ul>
+      </div>
+      <div class="cs">
+        <h3>What it is not</h3>
+        <div class="not-box">Not mentorship. Not coaching. Not a Q&A session. It is a structured handoff event — the peer shows one thing, the user maps it to their context, and both leave with a spec. The relationship is the vehicle, not the product.</div>
+      </div>
+      <div class="cs">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">ADPList offers peer sessions but they're unstructured — no template, no spec output, no follow-through mechanism. Every existing peer product ends when the session ends. PeerBuild ends when the user has a spec. That gap is structural and unaddressed by anything in the competitive landscape.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <div class="cs-label">Segment</div>
+      <p style="font-size:13px; color:var(--muted);">P2-new professionals who are aware of the gap, have tried (course, YouTube, tutorial) and stalled, and are most likely to convert when shown proof by someone in the same job. The matching must be by title + org-type — not industry alone, as Rohan's case confirms.</p>
+    </div>
+  </div>
+
+  <!-- C3: WorkBreaker -->
+  <div class="concept">
+    <div class="concept-head ch-blue">
+      <div>
+        <div class="c-eyebrow eb">Concept 3 · Solves Pain Point 2 · Conversational Decomposition</div>
+        <div class="c-title tb">WorkBreaker</div>
+        <div class="c-tagline lgb">You describe your most annoying Monday task in plain English. WorkBreaker translates it into a buildable spec — no technical knowledge required.</div>
+      </div>
+      <span class="pri pri-3" style="flex-shrink:0; margin-top:4px;">#3</span>
+    </div>
+    <div class="concept-body">
+      <div class="cs">
+        <h3>The barrier it breaks</h3>
+        <div class="barrier-box">PP2 specifically: The decomposition wall exists because users are asked "what do you want to automate?" — a technically-framed question they can't answer. WorkBreaker reframes the entry point as "what's the most annoying thing you do repeatedly?" — a question anyone can answer — and does the decomposition for them through dialogue.</div>
+        <div class="quote">"What should I automate? I don't even know where to start."<span>— Composite from 5 P3 interviews</span></div>
+      </div>
+      <div class="cs">
+        <h3>Key features</h3>
+        <ul>
+          <li>Conversational interface — 5 exchanges maximum</li>
+          <li>Opens with: "Describe the most annoying recurring task in your week. Plain English, no jargon."</li>
+          <li>AI asks 3 focused follow-up questions: frequency, who else is involved, what the output looks like</li>
+          <li>Outputs a complete spec: trigger, inputs, steps, output, recommended tool</li>
+          <li>Spec is editable inline before export</li>
+          <li>"Not quite right" loop: user can flag any spec field and WorkBreaker re-asks that specific question</li>
+          <li>Saves a library of specs over time — users build a personal automation backlog</li>
+        </ul>
+      </div>
+      <div class="cs">
+        <h3>What it is not</h3>
+        <div class="not-box">Not an automation builder. Not a chatbot for productivity tips. Not a workflow tool. It is purely the decomposition layer — the step that currently happens nowhere, leaving users with intent and no spec. It hands off the output to any automation tool.</div>
+      </div>
+      <div class="cs">
+        <h3>Why existing products miss this</h3>
+        <div class="diff-box">Zapier and n8n assume users arrive with a spec. ChatGPT can help decompose but requires the user to know what to ask — the same problem. No product makes "describe your problem in plain English → receive buildable spec" its core job. WorkBreaker is the missing translation layer between intent and execution.</div>
+      </div>
+    </div>
+    <div class="concept-full">
+      <div class="cs-label">Segment</div>
+      <p style="font-size:13px; color:var(--muted);">P2-new professionals who have intent and motivation but stall at the blank page of "what do I build?" They're not stuck for lack of tools — they're stuck because no product speaks to them in human language and hands them back a technical artifact. WorkBreaker is also the natural follow-on for users who complete a RoleSpec session and want to go further.</p>
+    </div>
+  </div>
+
+  <!-- How they compose -->
+  <div style="border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; background: var(--bg2);">
+    <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 0.75rem;">How the three concepts compose</h3>
+    <div style="font-size: 13px; line-height: 2; text-align: center;">
+      <span style="background: var(--purple-bg); color: var(--purple-dark); padding: 2px 10px; border-radius: var(--radius-sm); font-weight: 500;">RoleSpec</span>
+      <span style="color: var(--muted); margin: 0 8px;">shows what's possible →</span>
+      <span style="background: var(--teal-bg); color: var(--teal-dark); padding: 2px 10px; border-radius: var(--radius-sm); font-weight: 500;">PeerBuild</span>
+      <span style="color: var(--muted); margin: 0 8px;">activates + maps to your context →</span>
+      <span style="background: var(--blue-bg); color: var(--blue-dark); padding: 2px 10px; border-radius: var(--radius-sm); font-weight: 500;">WorkBreaker</span>
+      <span style="color: var(--muted); margin: 0 8px;">handles anything that doesn't fit a template</span>
+      <br>
+      <span style="font-size: 12px; color: var(--muted);">Discovery → Activation → Open-ended decomposition</span>
+    </div>
+  </div>
+</section>
+
+<!-- FLOWS -->
+<section id="flows">
+  <div class="section-label">User Flows</div>
+  <h2>How a stuck professional moves through each concept</h2>
+
+  <div class="flow-grid">
+    <div class="flow-box">
+      <h3 style="color: var(--purple);">RoleSpec — Surbhi, Ops Analyst (P2)</h3>
+      <div class="flow-step">
+        <div class="step-n sn-p">1</div>
+        <div class="step-content"><h4>Role onboarding</h4><p>"Ops Analyst · SaaS · 50–200 person company." 60 seconds.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-p">2</div>
+        <div class="step-content"><h4>Browse role-specific specs</h4><p>Sees 12 specs from ops analysts like her. "Weekly status report to Slack" · "Ticket triage from email" · "Meeting summary → action items in Notion."</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-p">3</div>
+        <div class="step-content"><h4>Recognition fires</h4><p>"That's literally what I do every Monday." Clicks "Make it mine."</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-p">4</div>
+        <div class="step-content"><h4>3 adaptation questions</h4><p>"Which tool do you use for status updates?" "Who receives it?" "How often?" Spec updates in real time.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-p">5</div>
+        <div class="step-content"><h4>Export and build</h4><p>Full spec downloaded. Handed to Zapier or a developer. First automation has a name, a trigger, and an output.</p></div>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <h3 style="color: var(--teal);">PeerBuild — Saransh, PM (P3)</h3>
+      <div class="flow-step">
+        <div class="step-n sn-t">1</div>
+        <div class="step-content"><h4>Matched by role + org type</h4><p>"Principal PM · Enterprise e-commerce." Matched with Anjali — same title, Series B SaaS.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-t">2</div>
+        <div class="step-content"><h4>Part 1: peer shows one thing (15 min)</h4><p>Anjali shares her screen. "This is the automation I built for sprint retro summaries. Here's exactly how it works."</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-t">3</div>
+        <div class="step-content"><h4>Part 2: map to your context (15 min)</h4><p>Guided template: "Which part of Anjali's workflow matches something you do?" Saransh identifies his PRD review cycle.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-t">4</div>
+        <div class="step-content"><h4>Spec produced in session</h4><p>Shared doc: Anjali's original spec + Saransh's adapted version. Both filled in together before the call ends.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-n sn-t">5</div>
+        <div class="step-content"><h4>7-day follow-up</h4><p>Reminder sent. "Did you build it?" Anjali is notified when Saransh marks it built — her peer rating goes up.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-box" style="margin-top: 0.5rem;">
+    <h3 style="color: var(--blue); margin-bottom: 0.75rem;">WorkBreaker — Akash, IT Ops Analyst (P3)</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+      <div style="padding: 12px; border-right: 0.5px solid var(--border);">
+        <div class="step-n sn-b" style="margin-bottom:6px;">1</div>
+        <h4 style="font-size:12px; font-weight:500; margin-bottom:3px;">Opens WorkBreaker</h4>
+        <p style="font-size:11px; color:var(--muted);">Prompted: "What's the most annoying thing you do every week at work?"</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--border);">
+        <div class="step-n sn-b" style="margin-bottom:6px;">2</div>
+        <h4 style="font-size:12px; font-weight:500; margin-bottom:3px;">Describes in plain English</h4>
+        <p style="font-size:11px; color:var(--muted);">"Every Monday I copy ticket counts from 3 dashboards into a spreadsheet and email it to 4 managers."</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--border);">
+        <div class="step-n sn-b" style="margin-bottom:6px;">3</div>
+        <h4 style="font-size:12px; font-weight:500; margin-bottom:3px;">3 follow-up questions</h4>
+        <p style="font-size:11px; color:var(--muted);">Which tools are the dashboards in? What format is the email? Does anyone edit it before sending?</p>
+      </div>
+      <div style="padding: 12px; border-right: 0.5px solid var(--border);">
+        <div class="step-n sn-b" style="margin-bottom:6px;">4</div>
+        <h4 style="font-size:12px; font-weight:500; margin-bottom:3px;">Spec delivered</h4>
+        <p style="font-size:11px; color:var(--muted);">Trigger: every Monday 8am. Input: Jira + Notion dashboards. Output: formatted email. Tool: Zapier. Difficulty: low.</p>
+      </div>
+      <div style="padding: 12px;">
+        <div class="step-n sn-b" style="margin-bottom:6px;">5</div>
+        <h4 style="font-size:12px; font-weight:500; margin-bottom:3px;">Edit and export</h4>
+        <p style="font-size:11px; color:var(--muted);">Akash edits one field, exports. Takes it to Zapier with a spec in hand — no dependency handling confusion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN QUESTIONS -->
+<section id="openq">
+  <div class="section-label">Open Questions for Phase 3</div>
+  <h2>What needs to be validated before building</h2>
+
+  <div class="oq">
+    <div class="oq-label ql-crit">Critical — RoleSpec</div>
+    <h4>Will practitioners actually contribute specs — and will they be honest about what they built?</h4>
+    <p>RoleSpec's value depends entirely on the quality and authenticity of contributed specs. If practitioners only submit polished, aspirational workflows (not what they actually use), the product fails the same way YouTube AI influencer content does. Test: recruit 5 practitioners, ask them to write a spec for something they genuinely use weekly, and measure whether the output is specific enough to be buildable by someone else.</p>
+  </div>
+
+  <div class="oq">
+    <div class="oq-label ql-crit">Critical — PeerBuild</div>
+    <h4>Can the structured template force a spec output — or will Part 2 drift into open conversation?</h4>
+    <p>The mechanism depends on Part 2 producing a filled spec, not just a good chat. If the facilitation template isn't tight enough, sessions end with inspiration and no artifact — the same failure mode as ADPList. Test: run 3 sessions with the template and measure whether every session ends with a spec that a third party can evaluate as "buildable without further clarification."</p>
+  </div>
+
+  <div class="oq">
+    <div class="oq-label ql-crit">Critical — WorkBreaker</div>
+    <h4>Does a conversational spec feel credible enough to act on — or does it feel like a ChatGPT output?</h4>
+    <p>WorkBreaker's risk is the "AI generated this, it probably won't work" perception. The spec needs to feel grounded and specific — not generic. Test: show 5 P2-new users a WorkBreaker-generated spec vs a human-written spec for the same task. Measure whether they trust it enough to take it to an automation tool. If not, the product needs a "reviewed by a practitioner" layer.</p>
+  </div>
+
+  <div class="oq">
+    <div class="oq-label ql-high">High — RoleSpec + PeerBuild</div>
+    <h4>Is role + org-type specific enough as a matching criterion — or do users need task-level matching?</h4>
+    <p>Rohan confirmed that cross-role doesn't transfer. But Surbhi's frustration suggests even same-role content fails if the task context is different (startup ops vs enterprise ops). PeerBuild and RoleSpec both match by title + org-type. Test whether task-type specificity matters more than title specificity for activation — or if title + org-type is granular enough to produce the "that's exactly my situation" moment.</p>
+  </div>
+
+  <div class="oq">
+    <div class="oq-label ql-high">High — All three</div>
+    <h4>Do these produce a crossing to P3-new — or do they just produce a single spec?</h4>
+    <p>All three concepts are designed to produce a first automation spec. But the research also showed that daily AI usage can plateau without expansion. A single spec may not produce the identity shift ("I'm someone who builds with AI") needed for sustained behaviour change. Phase 3 needs to test whether completing one spec leads to a second — or whether the user returns to surface usage after one build.</p>
+  </div>
+
+</section>
+
+<footer>
+  HelloPM Cohort 49 · MGA 4 · Phase 2 · May 2026 · Concepts: RoleSpec, PeerBuild, WorkBreaker
+</footer>
+
+</body>
+</html>
